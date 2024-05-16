@@ -35,7 +35,7 @@ body {
 /* TYPOGRAPHY */
 
 h1 {
-  font-size: 100px;
+  font-size: 200px;
   line-height: 90%;
   font-weight: 100;
   text-transform: uppercase;
@@ -89,7 +89,11 @@ h1 {
 }
 
 .introduction-text {
-  padding-bottom: 80px;
+  height:1000px;
+}
+
+.introduction-text .col-md-12 {
+  position: fixed;
 }
 
 .introduction-text span img {
@@ -110,7 +114,9 @@ h1 {
   border: 0px !important;
   background-color: inherit;
   margin-right: 15px;
-  color: inherit;
+  background-color: coral;
+  border-radius:30px;
+  padding:8px;
 }
 
 #filters.button a:active,
