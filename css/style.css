@@ -121,7 +121,7 @@ h1 {
 
 #filters.button a:active,
 .button.is-checked {
-  /*color: #f69494;*/
+  /*color: #f69494;*/ 
   font-family: "Gabriela";
   font-weight: 300;
   font-style: italic;
