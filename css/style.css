@@ -2,23 +2,6 @@
 
 /* FONTS */
 
-@font-face {
-  font-family: "Gabriela";
-  src: url("../fonts/Gabriela-Regular.woff2") format("woff2"),
-    url("../fonts/Gabriela-Regular.woff") format("woff"),
-    url("../fonts/Gabriela-Regular.ttf") format("truetype");
-  font-weight: 300;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: "Gabriela";
-  src: url("../fonts/Gabriela-RegularItalic.woff2") format("woff2"),
-    url("../fonts/Gabriela-RegularItalic.woff") format("woff"),
-    url("../fonts/Gabriela-RegularItalic.ttf") format("truetype");
-  font-weight: 300;
-  font-style: italic;
-}
 
 @media (min-width: 1200px) {
   .container {
@@ -35,16 +18,15 @@ body {
 /* TYPOGRAPHY */
 
 h1 {
-  font-size: 200px;
+  font-size: 100px;
   line-height: 90%;
   font-weight: 100;
-  text-transform: uppercase;
+
 }
 
 .text-highlight {
   /*color: #f69494;*/
-  font-family: "Gabriela";
-  font-weight: 300;
+  font-weight: 200;
   font-style: italic; 
 }
 
@@ -89,11 +71,7 @@ h1 {
 }
 
 .introduction-text {
-  height:1000px;
-}
-
-.introduction-text .col-md-12 {
-  position: fixed;
+  padding-bottom: 80px;
 }
 
 .introduction-text span img {
@@ -113,19 +91,17 @@ h1 {
 #filters .button {
   border: 0px !important;
   background-color: inherit;
+  color:white;
   margin-right: 15px;
-  background-color: coral;
-  border-radius:30px;
-  padding:8px;
+  font-weight: 100;
+
 }
 
 #filters.button a:active,
 .button.is-checked {
-  /*color: #f69494;*/ 
-  font-family: "Gabriela";
-  font-weight: 300;
-  font-style: italic;
-  border: none !important;
+  color: #f69494 !important;
+  font-weight: 100;
+  text-decoration: none !important;
 }
 
 .work-item {
@@ -139,7 +115,9 @@ h1 {
 
 #work img {
   width: 100%;
+  height:500px;
   margin-bottom: 15px;
+  object-fit: cover;
 }
 
 #work h3 {
@@ -153,6 +131,33 @@ h1 {
   margin-bottom: 30px;
   border-bottom: 1px solid white !important;
 }
+
+video {
+  width: 100%; /* Adjust the width as needed */
+  height: 500px; /* Maintain the aspect ratio */
+  object-fit: cover;
+  overflow: hidden;
+  margin-bottom: 15px;
+}
+
+
+/* PACKERY */
+
+/* clear fix */
+.grid:after {
+  content: '';
+  display: block;
+  clear: both;
+}
+
+/* ---- .grid-item ---- */
+
+.grid-item {
+  float: left;
+  width: 100%;
+  height: auto;
+}
+
 
 /* ABOUT */
 
@@ -215,7 +220,6 @@ h1 {
 }
 
 #project-description h3 {
-  font-family: "Gabriela";
   font-style: italic;
   font-weight: 300;
   font-size: 24px;
