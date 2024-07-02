@@ -13,7 +13,6 @@ const logoCollectionImages = [
     "images/logo-shuffle/logo_tradie.jpg",
     "images/logo-shuffle/logo_bouklas.jpg",
     "images/logo-shuffle/logo_cherry.jpg",
-    "images/logo-shuffle/logo_continuum",
     "images/logo-shuffle/logo_dafne.jpg",
     "images/logo-shuffle/logo_fiona.jpg",
     "images/logo-shuffle/logo_ii.jpg",
@@ -29,7 +28,6 @@ const logoCollectionImages = [
     "images/logo-shuffle/logo_nite-records.jpg",
     "images/logo-shuffle/logo_carla.jpg",
     "images/logo-shuffle/logo_ucla.jpg",
-    "images/logo-shuffle/logo_tradie.jpg",
     
     
 ];
