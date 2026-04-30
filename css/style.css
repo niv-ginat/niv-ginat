@@ -158,6 +158,10 @@ h1 {
   height: auto;
 }
 
+.grid-item.col-lg-12 {
+  width: 100% !important;
+}
+
 
 /* ABOUT */
 
