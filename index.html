@@ -1,380 +1,65 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, shrink-to-fit=no"
-    />
+---
+layout: default
+og_image: /images/thumbnails/Felix_thumbnail.webp
+---
 
-    <!-- Bootstrap CSS -->
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
-      integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2"
-      crossorigin="anonymous"
-    />
+<div id="filters" class="button-group">
+  {% for f in site.filters %}
+  <button class="button{% if forloop.first %} is-checked{% endif %}" data-filter="{{ f.value }}">{{ f.label }}</button>
+  {% endfor %}
+</div>
 
-    <link rel="stylesheet" href="css/style.css" />
-
-    <title>Niv Ginat - Graphic Design & Product Direction</title>
-
-    <!-- Open Graph meta tags -->
-    <meta
-      property="og:title"
-      content="Niv Ginat - Graphic Design & Product Direction"
-    />
-    <meta
-      property="og:description"
-      content="Check out the portfolio and design projects of Niv Ginat."
-    />
-    <meta
-      property="og:image"
-      content="https://yourdomain.com/path/to/your-image.jpg"
-    />
-    <meta property="og:url" content="https://nivginat.com" />
-    <meta property="og:type" content="website" />
-  </head>
-  <body>
-    <div class="container">
-      <nav id="navigation" class="navbar-expand-md navbar-black bg-black row">
-        <div class="logo col-8">
-          <a href="/"> <p>nivginat</p></a>
-        </div>
-
-        <button
-          class="navbar-toggler x-button col-4"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarNav"
-          aria-controls="navbarNav"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <div class="animated-icon">
-            <span></span><span></span><span></span>
-          </div>
-        </button>
-
-        <div class="collapse navbar-collapse" id="navbarNav">
-          <div class="col-lg-6 justify-content-end">
-            <ul class="nav navbar-nav">
-              <li class="nav-item">
-                <a class="nav-link active" href="/">Work</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="about.html">About</a>
-              </li>
-              <li class="nav-item">
-                <a
-                  class="nav-link"
-                  target="_blank"
-                  href="https://www.behance.net/nivginatc07e"
-                  >Behance</a
-                >
-              </li>
-            </ul>
-          </div>
-
-          <div class="col-lg-6 justify-content-end">
-            <ul class="nav navbar-nav">
-              <li class="nav-item">
-                <a class="nav-link" href="tel:+18187269932"
-                  >T. +1 818 726 9932</a
-                >
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="mailto: niv.ginat@gmail.com"
-                  >niv.ginat@gmail.com</a
-                >
-              </li>
-            </ul>
-          </div>
-        </div>
-      </nav>
-
-      <div id="filters" class="button-group">
-        <button class="button is-checked" data-filter="*">All</button>
-        <button class="button" data-filter=".branding">Branding</button>
-        <button class="button" data-filter=".packaging">Packaging</button>
-        <button class="button" data-filter=".print">Print</button>
-        <button class="button" data-filter=".ux_ui">UI/UX</button>
-        <button class="button" data-filter=".art">Art</button>
+<div id="work" class="row grid">
+  {% assign items = site.projects | where_exp: "p", "p.hidden != true" | sort: "order" %}
+  {% for p in items %}
+  <div class="{{ p.col }} col-md-6 work-item element-item {{ p.categories | join: ' ' }} grid-item">
+    <a href="{{ p.url }}">
+      <div class="media"{% if p.media_scale %} style="--media-scale: {{ p.media_scale }}"{% endif %}>
+        {% if p.video %}
+        <video autoplay loop muted playsinline>
+          <source src="{{ p.video }}" type="video/mp4" />
+        </video>
+        {% elsif p.thumb and p.thumb != "" %}
+        <img src="{{ p.thumb }}" alt="{{ p.title }}" loading="lazy"{% if p.shuffle %} id="logoCollectionImage"{% endif %} />
+        {% else %}
+        <span class="media-placeholder">{{ p.title }}<em>artwork to come</em></span>
+        {% endif %}
       </div>
+      <h3>{{ p.title }}</h3>
+      <h4>{{ p.capabilities }}</h4>
+    </a>
+  </div>
+  {% endfor %}
+</div>
 
-      <div id="work" class="row grid">
-        <div class="col-lg-8 col-md-6 work-item element-item print grid-item">
-          <a href="projects/felix-homes.html">
-            <img src="images/thumbnails/Felix_thumbnail.jpg" />
-            <h3>Felix Homes</h3>
-            <h4>Branding + Art Direction + UI/UX</h4>
-          </a>
-        </div>
-
-        <div class="col-lg-4 col-md-6 work-item element-item print grid-item">
-          <a href="projects/typographic-fruit.html">
-            <img src="images/thumbnails/fruit_thumbnail.jpg" />
-            <h3>Typographic Fruit Post Series</h3>
-            <h4>Print</h4>
-          </a>
-        </div>
-
-        <div class="col-lg-4 col-md-6 work-item element-item print grid-item">
-          <a href="projects/miss-academy.html">
-            <img src="images/thumbnails/miss-academy-thumbnail.jpg" />
-            <h3>Miss Acaddemy</h3>
-            <h4>Print</h4>
-          </a>
-        </div>
-
-        <div
-          class="col-lg-4 col-md-6 work-item element-item branding grid-item"
-        >
-          <a href="projects/carla-company.html">
-            <img src="images/thumbnails/CC_thumbnail.jpg" />
-            <h3>Carla & Company</h3>
-            <h4>Branding</h4>
-          </a>
-        </div>
-
-        <div
-          class="col-lg-4 col-md-6 work-item element-item branding ux_ui grid-item"
-        >
-          <a href="projects/propertyhedge.html">
-            <img src="images/thumbnails/propertyhedge-thumbnail.jpg" />
-            <h3>Propertyhedge</h3>
-            <h4>Branding + UI/UX</h4>
-          </a>
-        </div>
-
-        <div class="col-lg-4 col-md-6 work-item element-item art grid-item">
-          <a href="projects/nightstand.html">
-            <img src="images/thumbnails/nightstand_thumbnail_2.png" />
-            <h3>FrutaPuta Nightstand</h3>
-            <h4>Personal Project</h4>
-          </a>
-        </div>
-        <div class="col-lg-8 col-md-6 work-item element-item ux_ui grid-item">
-          <a href="projects/milo.html">
-            <video autoplay loop muted playsinline>
-              <source
-                src="video/video_3_milos_rotation_low-1.mp4"
-                type="video/mp4"
-              />
-            </video>
-
-            <h3>Milo</h3>
-            <h4>Web Design + Marketing</h4>
-          </a>
-        </div>
-
-        <div class="col-lg-4 col-md-6 work-item element-item ux_ui grid-item">
-          <a href="projects/caavo.html">
-            <img src="images/thumbnails/caavo-thumbnail.jpg" />
-            <h3>Caavo</h3>
-            <h4>UI/UX</h4>
-          </a>
-        </div>
-
-        <div
-          class="col-lg-12 col-md-6 work-item element-item branding packaging grid-item"
-        >
-          <a href="projects/cairo-crayons.html">
-            <video autoplay loop muted playsinline>
-              <source
-                src="video/cairo-crayon-animation_2.mp4"
-                type="video/mp4"
-              />
-            </video>
-            <h3>Cairo Crayons</h3>
-            <h4>Branding + Packaging</h4>
-          </a>
-        </div>
-
-        <div class="col-lg-4 col-md-6 work-item element-item print grid-item">
-          <a href="projects/album-covers.html">
-            <img src="images/thumbnails/album-covers_thumbnails.jpg" />
-            <h3>Album Covers</h3>
-            <h4>Print</h4>
-          </a>
-        </div>
-
-        <div
-          class="col-lg-4 col-md-6 work-item element-item print branding grid-item"
-        >
-          <a href="projects/kcrw-summer-nights.html">
-            <img src="images/thumbnails/kcrw-thumbnail.jpg" />
-            <h3>KCRW Summer Nights</h3>
-            <h4>Branding + Print</h4>
-          </a>
-        </div>
-
-        <div
-          class="col-lg-6 col-md-6 work-item element-item branding grid-item"
-        >
-          <a href="projects/assorted-logos.html">
-            <img
-              src="images/thumbnails/logos_thumbnails.jpg"
-              id="logoCollectionImage"
-            />
-            <h3>Logo Collection</h3>
-            <h4>Branding</h4>
-          </a>
-        </div>
-
-        <div class="col-lg-3 col-md-6 work-item element-item art grid-item">
-          <a href="projects/stencil.html">
-            <img src="images/thumbnails/stencil_thumbnail.jpg" />
-            <h3>Stencil</h3>
-            <h4>Print Project</h4>
-          </a>
-        </div>
-
-        <div class="col-lg-3 col-md-6 work-item element-item art grid-item">
-          <a href="projects/street-tiles.html">
-            <video autoplay loop muted playsinline>
-              <source src="video//version1.mp4" type="video/mp4" />
-            </video>
-            <h3>Street Tiles</h3>
-            <h4>Personal Project</h4>
-          </a>
-        </div>
-
-        <div
-          class="col-lg-4 col-md-6 work-item element-item branding grid-item"
-        >
-          <a href="projects/cafe-nido.html">
-            <img src="images/thumbnails/cafe_nido_thumbnail.jpg" />
-            <h3>Cafe Nido</h3>
-            <h4>Branding</h4>
-          </a>
-        </div>
-
-        <div
-          class="col-lg-4 col-md-6 work-item element-item branding print grid-item"
-        >
-          <a href="projects/the-authenique.html">
-            <img src="images/thumbnails/the_authenique_thumbnail.jpg" />
-            <h3>The Authenique</h3>
-            <h4>Branding + Print</h4>
-          </a>
-        </div>
-      </div>
-      <!--
-      <div id="more-work" class="row">
-        <div class="col-12 introduction-text">
-          <h1>More stuff</h1>
-        </div>
-
-        <div class="col-md-3 more-work-item">
-          <a target="_blank" 0href="pdf/UCLA Infographic_v4.pdf">
-            <img src="images/thumbnails/pdfs/UCLA_infographic.jpg" />
-            <h3>UCLA - Infographic Flyer</h3>
-          </a>
-        </div>
-
-        <div class="col-md-3 more-work-item">
-          <a target="_blank" href="pdf/ARTSAMO_Style-Guide_v5.pdf">
-            <img src="images/thumbnails/pdfs/art-samo_style-guide.jpg" />
-            <h3>Art Samo - Brand Guidelines</h3>
-          </a>
-        </div>
-        <div class="col-md-3 more-work-item">
-          <a target="_blank" href="pdf/ii_Visual_ID_10-18-18.pdf">
-            <img src="images/thumbnails/pdfs/II_branding-deck.jpg" />
-            <h3>Institutional Investor - Visual ID</h3>
-          </a>
-        </div>
-
-        <div class="col-md-3 more-work-item">
-          <a target="_blank" href="pdf/180716_AEM_DevOpsAutomation.pdf">
-            <img src="images/thumbnails/pdfs/aem-devops.jpg" />
-            <h3>AEM - DevOps Automation Service Catalog</h3>
-          </a>
-        </div>
-
-        <div class="col-md-3 more-work-item">
-          <a target="_blank" href="pdf/Vizuri_Case Study.pdf">
-            <img src="images/thumbnails/pdfs/Vizuri-ebook.jpg" />
-            <h3>Vizuri - Insurance Handbook</h3>
-          </a>
-        </div>
-
-        <div class="col-md-3 more-work-item">
-          <a target="_blank" href="pdf/Seam Technic Booklet.pdf">
-            <img src="images/thumbnails/pdfs/seam-product-outline.jpg" />
-            <h3>Seam - Product Outline</h3>
-          </a>
-        </div>
-
-        <div class="col-md-3 more-work-item">
-          <a
-            target="_blank"
-            href="https://grow.greenhouse.io/workplace-intelligence/p/1"
-          >
-            <img
-              src="../images/thumbnails/pdfs/greenhouse-intelligence_thumbnail.jpg"
-            />
-            <h3>Greenhouse - Intelligence Report</h3>
-          </a>
-        </div>
-
-        <div class="col-md-3 more-work-item">
-          <a
-            target="_blank"
-            href="https://grow.greenhouse.io/workplace-intelligence/p/1"
-          >
-            <img
-              src="../images/thumbnails/pdfs/greenhouse-intelligence_thumbnail.jpg"
-            />
-            <h3>Greenhouse - Intelligence Report</h3>
-          </a>
-        </div>
-      </div>-->
-
-      <div class="footer">
-        <p>
-          © Niv Ginat Design 2023
-          <span class="text-highlight">All rights reserved.</span>
-        </p>
-      </div>
-    </div>
-
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW"
-      crossorigin="anonymous"
-    ></script>
-
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="js/isotope-docs.min.js"></script>
-
-    <script src="/js/isotope-docs.min.js"></script>
-    <script src="https://unpkg.com/isotope-layout@3/dist/isotope.pkgd.js"></script>
-
-    <script src="/js/nav-toggle.js"></script>
-    <script src="/js/logoShuffle.js"></script>
-    <script src="/js/packery-mode.pkgd.js"></script>
-
-    <script>
-      // external js: isotope.pkgd.js
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://unpkg.com/isotope-layout@3/dist/isotope.pkgd.js"></script>
+<script src="/js/packery-mode.pkgd.js"></script>
+<script src="/js/nav-toggle.js"></script>
+<script src="/js/logoShuffle.js"></script>
+<script>
+// external js: isotope.pkgd.js
 
       // init Isotope
 
-      var $grid = $(".grid").imagesLoaded(function () {
-        // init Isotope after all images have loaded
-        $grid.isotope({
-          itemSelector: ".element-item",
-          //layoutMode: "fitRows",
-          layoutMode: "packery",
-          getSortData: {
-            weight: function (itemElem) {
-              var weight = $(itemElem).find(".weight").text();
-              return parseFloat(weight.replace(/[\(\)]/g, ""));
-            },
+      // Cards are a fixed height in CSS, so layout no longer depends on
+      // images having loaded — Isotope can initialise immediately, without
+      // the isotope-docs bundle we previously pulled in for imagesLoaded.
+      var $grid = $(".grid").isotope({
+        itemSelector: ".element-item",
+        percentPosition: true,
+        transitionDuration: "0.4s",
+        // Packery back-fills the gaps a plain row layout leaves when the
+        // next card is too wide for the space left over. Because every card
+        // is the same height, filling a gap still lands the card on the row
+        // boundary, so the rules stay aligned.
+        layoutMode: "packery",
+        getSortData: {
+          weight: function (itemElem) {
+            var weight = $(itemElem).find(".weight").text();
+            return parseFloat(weight.replace(/[\(\)]/g, ""));
           },
-        });
+        },
       });
 
       //var $grid = $('.grid').isotope({
@@ -410,6 +95,27 @@
         $grid.isotope({ filter: filterValue });
       });
 
+      // Draw each card's rule in from the left as it enters the viewport.
+      (function () {
+        var work = document.getElementById("work");
+        var items = document.querySelectorAll("#work .work-item");
+        if (!work || !("IntersectionObserver" in window)) return;
+        // Opt in to the hidden starting state only now that we know the
+        // observer below will run and can reveal them again.
+        work.classList.add("reveal-rules");
+        var io = new IntersectionObserver(
+          function (entries) {
+            entries.forEach(function (entry) {
+              if (!entry.isIntersecting) return;
+              entry.target.classList.add("is-inview");
+              io.unobserve(entry.target);
+            });
+          },
+          { rootMargin: "0px 0px -12% 0px", threshold: 0.15 }
+        );
+        items.forEach(function (el) { io.observe(el); });
+      })();
+
       // change is-checked class on buttons
       $(".button-group").each(function (i, buttonGroup) {
         var $buttonGroup = $(buttonGroup);
@@ -418,6 +124,4 @@
           $(this).addClass("is-checked");
         });
       });
-    </script>
-  </body>
-</html>
+</script>

@@ -1,0 +1,11 @@
+_site/
+.jekyll-cache/
+.jekyll-metadata
+.sass-cache/
+.DS_Store
+**/.DS_Store
+Gemfile.lock
+vendor/
+
+# Private briefing — keep out of the public repo
+NOTES.md

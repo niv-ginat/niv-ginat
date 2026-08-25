@@ -1,0 +1,47 @@
+# ---------------------------------------------------------------
+#  Site-wide settings. Change a value here and it updates
+#  everywhere it appears across the site.
+# ---------------------------------------------------------------
+title: Niv Ginat
+tagline: Product & Brand Design
+description: >-
+  Product and brand designer. Fifteen years designing the moments
+  where people decide to commit.
+url: https://nivginat.com
+
+# --- contact + social: edit once, updates every page ---
+author:
+  name: Niv Ginat
+  email: niv.ginat@gmail.com
+  phone_display: "T. +1 818 726 9932"
+  phone_href: "+18187269932"
+
+social:
+  behance: https://www.behance.net/nivginatc07e
+
+# --- footer ---
+copyright_start: 2019
+
+# --- third-party versions, in one place ---
+bootstrap_version: 5.3.3
+
+# --- projects collection: keeps existing /projects/*.html URLs ---
+collections:
+  projects:
+    output: true
+    permalink: /projects/:name.html
+
+defaults:
+  - scope: { path: "", type: "projects" }
+    values: { layout: "project" }
+
+# --- work-grid filter buttons ---
+filters:
+  - { label: All,       value: "*" }
+  - { label: "Brand & Identity", value: ".branding" }
+  - { label: Packaging, value: ".packaging" }
+  - { label: Print,     value: ".print" }
+  - { label: "UI/UX",   value: ".ux_ui" }
+  - { label: Art,       value: ".art" }
+
+exclude: [README.md, NOTES.md, Gemfile, Gemfile.lock, vendor]

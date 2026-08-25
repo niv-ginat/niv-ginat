@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>{% include head.html %}</head>
+  <body>
+    <div class="container">
+      {% include nav.html %}
+      {{ content }}
+      {% include footer.html %}
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@{{ site.bootstrap_version }}/dist/js/bootstrap.bundle.min.js"
+            crossorigin="anonymous"></script>
+    {% if page.scripts %}{% for s in page.scripts %}<script src="{{ s }}"></script>{% endfor %}{% endif %}
+  </body>
+</html>

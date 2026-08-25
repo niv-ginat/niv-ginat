@@ -2,32 +2,32 @@
 
 // Array of image URLs for the logo collection thumbnails
 const logoCollectionImages = [
-    "images/logo-shuffle/logo_apm.jpg",
-    "images/logo-shuffle/logo_astral.jpg",
-    "images/logo-shuffle/logo_CHFP.jpg",
-    "images/logo-shuffle/logo_dreamsociety.jpg",
-    "images/logo-shuffle/logo_funbox.jpg",
-    "images/logo-shuffle/logo_m-logo.jpg",
-    "images/logo-shuffle/logo_rosel.jpg",
-    "images/logo-shuffle/logo_the-lab.jpg",
-    "images/logo-shuffle/logo_tradie.jpg",
-    "images/logo-shuffle/logo_bouklas.jpg",
-    "images/logo-shuffle/logo_cherry.jpg",
-    "images/logo-shuffle/logo_dafne.jpg",
-    "images/logo-shuffle/logo_fiona.jpg",
-    "images/logo-shuffle/logo_ii.jpg",
-    "images/logo-shuffle/logo_intrunk.jpg",
-    "images/logo-shuffle/logo_lazoo.jpg",
-    "images/logo-shuffle/logo_m-logo.jpg",
-    "images/logo-shuffle/logo_master.jpg",
-    "images/logo-shuffle/logo_OC2019.jpg",
-    "images/logo-shuffle/logo_open.jpg",
-    "images/logo-shuffle/logo_solace.jpg",
-    "images/logo-shuffle/logo_squareone.jpg",
-    "images/logo-shuffle/logo_sv.jpg",
-    "images/logo-shuffle/logo_nite-records.jpg",
-    "images/logo-shuffle/logo_carla.jpg",
-    "images/logo-shuffle/logo_ucla.jpg",
+    "/images/logo-shuffle/logo_apm.webp",
+    "/images/logo-shuffle/logo_astral.webp",
+    "/images/logo-shuffle/logo_CHFP.webp",
+    "/images/logo-shuffle/logo_dreamsociety.webp",
+    "/images/logo-shuffle/logo_funbox.webp",
+    "/images/logo-shuffle/logo_m-logo.webp",
+    "/images/logo-shuffle/logo_rosel.webp",
+    "/images/logo-shuffle/logo_the-lab.webp",
+    "/images/logo-shuffle/logo_tradie.webp",
+    "/images/logo-shuffle/logo_bouklas.webp",
+    "/images/logo-shuffle/logo_cherry.webp",
+    "/images/logo-shuffle/logo_dafne.webp",
+    "/images/logo-shuffle/logo_fiona.webp",
+    "/images/logo-shuffle/logo_ii.webp",
+    "/images/logo-shuffle/logo_intrunk.webp",
+    "/images/logo-shuffle/logo_lazoo.webp",
+    "/images/logo-shuffle/logo_m-logo.webp",
+    "/images/logo-shuffle/logo_master.webp",
+    "/images/logo-shuffle/logo_OC2019.webp",
+    "/images/logo-shuffle/logo_open.webp",
+    "/images/logo-shuffle/logo_solace.webp",
+    "/images/logo-shuffle/logo_squareone.webp",
+    "/images/logo-shuffle/logo_sv.webp",
+    "/images/logo-shuffle/logo_nite-records.webp",
+    "/images/logo-shuffle/logo_carla.webp",
+    "/images/logo-shuffle/logo_ucla.webp",
     
     
 ];
@@ -46,15 +46,19 @@ function shuffleLogoImage() {
     currentLogoIndex = (currentLogoIndex + 1) % logoCollectionImages.length;
 }
 
-// Start shuffling the logo collection images
-logoShuffleInterval = setInterval(shuffleLogoImage, 500);
-
-// Pause shuffling on hover
-logoCollectionImage.addEventListener('mouseenter', () => {
-    clearInterval(logoShuffleInterval);
-});
-
-// Resume shuffling on mouseleave
-logoCollectionImage.addEventListener('mouseleave', () => {
+// Only wire this up on pages that actually carry the shuffling thumbnail —
+// without the guard this throws twice a second on every other page.
+if (logoCollectionImage) {
+    // Start shuffling the logo collection images
     logoShuffleInterval = setInterval(shuffleLogoImage, 500);
-});
+
+    // Pause shuffling on hover
+    logoCollectionImage.addEventListener('mouseenter', () => {
+        clearInterval(logoShuffleInterval);
+    });
+
+    // Resume shuffling on mouseleave
+    logoCollectionImage.addEventListener('mouseleave', () => {
+        logoShuffleInterval = setInterval(shuffleLogoImage, 500);
+    });
+}

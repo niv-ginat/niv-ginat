@@ -1,0 +1,68 @@
+---
+layout: default
+---
+
+{% if page.gallery and page.gallery.size > 0 %}
+  {% assign images = page.gallery %}
+{% elsif page.image_dir %}
+  {% assign found = site.static_files
+       | where_exp: "f", "f.path contains page.image_dir"
+       | where_exp: "f", "f.extname == '.webp' or f.extname == '.jpg' or f.extname == '.jpeg' or f.extname == '.png' or f.extname == '.gif'"
+       | where_exp: "f", "f.path != page.cover"
+       | sort: "name" %}
+  {% assign images = found | map: "path" %}
+{% endif %}
+
+{% if page.cover %}
+<div id="project-introduction">
+  <img src="{{ page.cover }}" alt="{{ page.title }}" />
+</div>
+{% endif %}
+
+<div id="project-description">
+
+  <div class="project-meta row">
+    <div class="col-6 col-md-3">
+      <span class="meta-label">Client</span>
+      <span class="meta-value">{% if page.client %}{{ page.client }}{% else %}{{ page.title }}{% endif %}</span>
+    </div>
+
+    {% if page.role %}
+    <div class="col-6 col-md-3">
+      <span class="meta-label">Role</span>
+      <span class="meta-value">{{ page.role }}</span>
+    </div>
+    {% endif %}
+
+    {% if page.capabilities %}
+    <div class="col-6 col-md-3">
+      <span class="meta-label">Capabilities</span>
+      <span class="meta-value">{{ page.capabilities }}</span>
+    </div>
+    {% endif %}
+
+    {% if page.year %}
+    <div class="col-6 col-md-3">
+      <span class="meta-label">Year</span>
+      <span class="meta-value">{{ page.year }}</span>
+    </div>
+    {% endif %}
+  </div>
+
+  {% if content != '' %}
+  <div class="project-prose">
+    {{ content }}
+  </div>
+  {% endif %}
+
+</div>
+
+{% if images and images.size > 0 %}
+<div id="project-gallery" class="row justify-content-center">
+  <div class="col-lg-10 col-12">
+    {% for img in images %}
+    <img src="{{ img }}" alt="{{ page.title }}" loading="lazy" />
+    {% endfor %}
+  </div>
+</div>
+{% endif %}
