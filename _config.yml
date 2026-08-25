@@ -43,6 +43,5 @@ filters:
   - { label: Print,     value: ".print" }
   - { label: "UI/UX",   value: ".ux_ui" }
   - { label: "Web Design", value: ".web_design" }
-  - { label: Art,       value: ".art" }
 
 exclude: [README.md, NOTES.md, Gemfile, Gemfile.lock, vendor]

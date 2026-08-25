@@ -252,7 +252,9 @@ p {
 #filters {
   border-top: 1px solid var(--rule) !important;
   border-bottom: 1px solid var(--rule) !important;
-  padding: var(--s-2) 0;
+  /* 0.6rem is var(--s-2) less 40%, tightening the gap between the rules
+     and the filter row sandwiched between them. */
+  padding: 0.6rem 0;
   margin-bottom: var(--s-4);
 }
 
@@ -784,4 +786,55 @@ p {
 #project-gallery.seamless img:last-of-type {
   border-bottom-left-radius: var(--radius);
   border-bottom-right-radius: var(--radius);
+}
+
+/* ==========================================================================
+   WORDMARK ANIMATION
+   Each letter sits in an overflow-hidden box and slides up into it, one
+   after the next — a mask reveal rather than a fade. Runs once on load and
+   replays on hover. The <a> carries an aria-label and the letters are
+   aria-hidden, so assistive tech reads "nivginat" once, not n-i-v-g-i-n-a-t.
+   ========================================================================== */
+
+#navigation .wordmark p { margin: 0; }
+
+#navigation .wordmark .wm-l {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: bottom;
+  line-height: 1;
+}
+
+#navigation .wordmark .wm-l i {
+  display: inline-block;
+  font-style: normal;
+  transform: translateY(105%);
+  animation: wm-reveal 0.55s var(--ease-media) forwards;
+  animation-delay: calc(var(--i) * 45ms);
+}
+
+@keyframes wm-reveal {
+  to { transform: translateY(0); }
+}
+
+/* Re-runs the reveal on hover; a distinct name so it restarts cleanly
+   rather than being treated as the same, already-finished animation. */
+#navigation .wordmark:hover .wm-l i {
+  animation: wm-rereveal 0.5s var(--ease-media);
+  animation-delay: calc(var(--i) * 35ms);
+}
+
+@keyframes wm-rereveal {
+  0%   { transform: translateY(0); }
+  40%  { transform: translateY(-105%); }
+  41%  { transform: translateY(105%); }
+  100% { transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #navigation .wordmark .wm-l i,
+  #navigation .wordmark:hover .wm-l i {
+    animation: none !important;
+    transform: none !important;
+  }
 }
