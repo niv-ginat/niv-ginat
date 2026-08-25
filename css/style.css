@@ -176,6 +176,12 @@ p {
 #navigation .logo a {
   color: inherit;
   font-size: 36px;
+  /* 900 asks for the heaviest cut in the family; Helvetica ships Bold as its
+     top weight, so this resolves to Helvetica Bold rather than a synthetic
+     smear. Arial Black is the fallback on machines without Helvetica. */
+  font-family: Helvetica, "Arial Black", Arial, sans-serif;
+  font-weight: 900;
+  letter-spacing: -0.02em;
   text-decoration: none;
   line-height: 1;
 }
@@ -511,7 +517,6 @@ p {
   margin-top: var(--s-7);
   padding-top: var(--s-3);
   padding-bottom: var(--s-4);
-  border-top: 1px solid var(--rule);
   font-size: var(--t-meta);
   color: var(--ink-faint);
 }
@@ -762,4 +767,21 @@ p {
   color: var(--ink-faint);
   letter-spacing: 0.06em;
   text-transform: uppercase;
+}
+
+/* Consecutive screens of one continuous page: butt them together with no gap,
+   and round only the outer corners so the seam reads as a single scroll. */
+#project-gallery.seamless img {
+  margin-bottom: 0;
+  border-radius: 0;
+}
+
+#project-gallery.seamless img:first-of-type {
+  border-top-left-radius: var(--radius);
+  border-top-right-radius: var(--radius);
+}
+
+#project-gallery.seamless img:last-of-type {
+  border-bottom-left-radius: var(--radius);
+  border-bottom-right-radius: var(--radius);
 }

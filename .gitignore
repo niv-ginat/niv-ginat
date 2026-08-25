@@ -4,8 +4,10 @@ _site/
 .sass-cache/
 .DS_Store
 **/.DS_Store
-Gemfile.lock
 vendor/
 
 # Private briefing — keep out of the public repo
 NOTES.md
+
+# Original full-size assets — converted copies live in images/
+_source/
