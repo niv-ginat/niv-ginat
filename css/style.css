@@ -793,11 +793,16 @@ p {
   background-repeat: no-repeat;
   background-size: 3200% 100%;
   background-position: 0 0;
-  animation: photocopy 5.28s steps(32) infinite;
+  /* steps(32, jump-none) walks 0%..100% inclusive = all 32 frames.
+     Percentage background-position resolves to
+     (container - image) * pct, so 0%->100% sweeps the strip exactly once;
+     a negative -3200% would push it off-screen instead. */
+  animation: photocopy 5.28s steps(32, jump-none) infinite;
 }
 
 @keyframes photocopy {
-  to { background-position: -3200% 0; }
+  from { background-position: 0% 0; }
+  to   { background-position: 100% 0; }
 }
 
 .logo-mark:hover { animation-play-state: paused; }
