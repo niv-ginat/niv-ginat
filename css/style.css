@@ -175,15 +175,9 @@ p {
 
 #navigation .logo a {
   color: inherit;
-  font-size: 36px;
-  /* 900 asks for the heaviest cut in the family; Helvetica ships Bold as its
-     top weight, so this resolves to Helvetica Bold rather than a synthetic
-     smear. Arial Black is the fallback on machines without Helvetica. */
-  font-family: Helvetica, "Arial Black", Arial, sans-serif;
-  font-weight: 900;
-  letter-spacing: -0.02em;
   text-decoration: none;
   line-height: 1;
+  display: inline-block;
 }
 
 #navigation ul {
@@ -536,7 +530,6 @@ p {
     margin-bottom: 0;
   }
 
-  #navigation .logo a { font-size: 32px; }
 
   #navigation button { height: 30px; }
 
@@ -789,52 +782,30 @@ p {
 }
 
 /* ==========================================================================
-   WORDMARK ANIMATION
-   Each letter sits in an overflow-hidden box and slides up into it, one
-   after the next — a mask reveal rather than a fade. Runs once on load and
-   replays on hover. The <a> carries an aria-label and the letters are
-   aria-hidden, so assistive tech reads "nivginat" once, not n-i-v-g-i-n-a-t.
+   LOGO MARK — 32-frame horizontal sprite, stepped like a photocopier
    ========================================================================== */
 
-#navigation .wordmark p { margin: 0; }
-
-#navigation .wordmark .wm-l {
-  display: inline-block;
-  overflow: hidden;
-  vertical-align: bottom;
-  line-height: 1;
+.logo-mark {
+  display: block;
+  width: 180px;
+  aspect-ratio: 508 / 184;
+  background-image: url('/images/logos/nivginat-sprite.webp');
+  background-repeat: no-repeat;
+  background-size: 3200% 100%;
+  background-position: 0 0;
+  animation: photocopy 5.28s steps(32) infinite;
 }
 
-#navigation .wordmark .wm-l i {
-  display: inline-block;
-  font-style: normal;
-  transform: translateY(105%);
-  animation: wm-reveal 0.55s var(--ease-media) forwards;
-  animation-delay: calc(var(--i) * 45ms);
+@keyframes photocopy {
+  to { background-position: -3200% 0; }
 }
 
-@keyframes wm-reveal {
-  to { transform: translateY(0); }
-}
-
-/* Re-runs the reveal on hover; a distinct name so it restarts cleanly
-   rather than being treated as the same, already-finished animation. */
-#navigation .wordmark:hover .wm-l i {
-  animation: wm-rereveal 0.5s var(--ease-media);
-  animation-delay: calc(var(--i) * 35ms);
-}
-
-@keyframes wm-rereveal {
-  0%   { transform: translateY(0); }
-  40%  { transform: translateY(-105%); }
-  41%  { transform: translateY(105%); }
-  100% { transform: translateY(0); }
-}
+.logo-mark:hover { animation-play-state: paused; }
 
 @media (prefers-reduced-motion: reduce) {
-  #navigation .wordmark .wm-l i,
-  #navigation .wordmark:hover .wm-l i {
-    animation: none !important;
-    transform: none !important;
-  }
+  .logo-mark { animation: none; }
+}
+
+@media (max-width: 767px) {
+  .logo-mark { width: 150px; }
 }
