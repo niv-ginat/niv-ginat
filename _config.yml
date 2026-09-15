@@ -13,7 +13,7 @@ url: https://nivginat.com
 author:
   name: Niv Ginat
   email: niv.ginat@gmail.com
-  phone_display: "T. +1 818 726 9932"
+  phone_display: "+1 818 726 9932"
   phone_href: "+18187269932"
 
 social:
@@ -43,5 +43,30 @@ filters:
   - { label: Print,     value: ".print" }
   - { label: "UI/UX",   value: ".ux_ui" }
   - { label: "Web Design", value: ".web_design" }
+
+# --- client strip --------------------------------------------------------
+# Set as text for now; swap `name` for an `svg:` path per row when real
+# marks arrive. The heading is deliberately separate from the list so the
+# claim can be worded accurately — see clients_label.
+clients_label: "Selected clients"
+# Ordered by how quickly a cold visitor recognises the name, not
+# chronologically — the first two do the most work.
+clients:
+  - { name: "AT&T" }
+  - { name: "AMC" }
+  - { name: "Modern Life" }
+  - { name: "9Yards Capital" }
+  - { name: "Lightdrop" }
+
+# --- analytics -----------------------------------------------------------
+# Paste the GA4 Measurement ID here (looks like G-XXXXXXXXXX) and the tag
+# loads on every page. Leave empty and nothing is injected at all — no
+# script, no cookie, no consent banner needed.
+google_analytics: ""
+
+# Search Console's "HTML tag" verification value — the content="..." string
+# only, not the whole meta tag. Can be removed once verified; keeping it
+# means re-verification never breaks.
+google_site_verification: ""
 
 exclude: [README.md, NOTES.md, Gemfile, Gemfile.lock, vendor]

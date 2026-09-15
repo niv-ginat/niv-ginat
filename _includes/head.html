@@ -16,4 +16,21 @@
 <link rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bootstrap@{{ site.bootstrap_version }}/dist/css/bootstrap.min.css"
       crossorigin="anonymous" />
+{% if site.google_site_verification != blank %}
+<meta name="google-site-verification" content="{{ site.google_site_verification }}" />
+{% endif %}
+
 <link rel="stylesheet" href="/css/style.css" />
+
+{% if site.google_analytics != blank %}
+<!-- Google Analytics 4. Only rendered when google_analytics is set in
+     _config.yml, so a local build stays clean and nothing is collected
+     until the ID is filled in. -->
+<script async src="https://www.googletagmanager.com/gtag/js?id={{ site.google_analytics }}"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', '{{ site.google_analytics }}', { anonymize_ip: true });
+</script>
+{% endif %}

@@ -1,13 +1,52 @@
 ---
 layout: default
 og_image: /images/thumbnails/Felix_thumbnail.webp
+description: Product and brand designer. Fifteen years designing the moments where people decide to commit.
 ---
 
-<div id="filters" class="button-group">
-  {% for f in site.filters %}
-  <button class="button{% if forloop.first %} is-checked{% endif %}" data-filter="{{ f.value }}">{{ f.label }}</button>
-  {% endfor %}
+<div class="row">
+  <div class="col-md-12">
+    <div class="introduction-text">
+      <h1 class="statement">
+        I design the moments where people decide to commit. Fifteen years in
+        product and brand design, most recently as co-founder and Head of
+        Product at Felix Homes, a technology-first real estate brokerage. I work
+        on the surfaces where a business earns its money — transaction flows,
+        subscription onboarding, and the identity systems that make people trust
+        them. The structure of those screens is a commodity now, generated on
+        demand; knowing what someone is afraid of at the moment you ask them to
+        commit is not. Based in Los Angeles, working across the US and Europe.
+        <a href="mailto:{{ site.author.email }}">Let's work together</a>
+      </h1>
+    </div>
+  </div>
 </div>
+
+{% if site.clients and site.clients.size > 0 %}
+<!-- Client strip. Text lockups until real marks exist — a wordmark set in
+     the site's own face is honest; a fabricated logo is not. -->
+<section id="clients" class="section" aria-label="{{ site.clients_label }}">
+  <p class="section-label">{{ site.clients_label }}</p>
+  <div class="section-body">
+    <ul class="clients-list">
+      {% for c in site.clients %}
+      <li>{{ c.name }}</li>
+      {% endfor %}
+    </ul>
+  </div>
+</section>
+{% endif %}
+
+<section class="section" aria-label="Filter work">
+  <p class="section-label">Work</p>
+  <div class="section-body">
+    <div id="filters" class="button-group">
+      {% for f in site.filters %}
+      <button class="button{% if forloop.first %} is-checked{% endif %}" data-filter="{{ f.value }}">{{ f.label }}</button>
+      {% endfor %}
+    </div>
+  </div>
+</section>
 
 <div id="work" class="row grid">
   {% assign items = site.projects | where_exp: "p", "p.hidden != true" | sort: "order" %}
@@ -98,15 +137,27 @@ og_image: /images/thumbnails/Felix_thumbnail.webp
       // Draw each card's rule in from the left as it enters the viewport.
       (function () {
         var work = document.getElementById("work");
-        var items = document.querySelectorAll("#work .work-item");
+        // Array, not the live NodeList — the stagger below needs indexOf.
+        var items = Array.prototype.slice.call(
+          document.querySelectorAll("#work .work-item")
+        );
         if (!work || !("IntersectionObserver" in window)) return;
         // Opt in to the hidden starting state only now that we know the
         // observer below will run and can reveal them again.
         work.classList.add("reveal-rules");
+        work.classList.add("reveal-media");
         var io = new IntersectionObserver(
           function (entries) {
-            entries.forEach(function (entry) {
-              if (!entry.isIntersecting) return;
+            // Stagger within each batch so cards open one after another
+            // rather than all at once. Sorted by document order, because
+            // the observer hands entries over in an arbitrary order.
+            var hit = entries.filter(function (e) { return e.isIntersecting; });
+            hit.sort(function (a, b) {
+              return items.indexOf(a.target) - items.indexOf(b.target);
+            });
+            hit.forEach(function (entry, i) {
+              var media = entry.target.querySelector(".media");
+              if (media) media.style.transitionDelay = i * 110 + "ms";
               entry.target.classList.add("is-inview");
               io.unobserve(entry.target);
             });

@@ -5,7 +5,10 @@
 
 :root {
   /* --- type ------------------------------------------------------------- */
-  --font-sans: Helvetica, Arial, sans-serif;
+  /* Helvetica proper where it exists (macOS/iOS ship Helvetica Neue),
+     then Helvetica, then Arial — which is metrically compatible, so the
+     layout does not reflow on Windows or Android. */
+  --font-sans: "Helvetica Neue", Helvetica, Arial, sans-serif;
 
   /* fluid scale — min at 375px, max at 1440px */
   --t-meta: 0.8125rem;                                  /* 13  nav, footer, tags */
@@ -32,9 +35,18 @@
   --rule: #ffffff;
   --rule-strong: #ffffff;
   --rule-weight: 1px;
-  --accent: #f69494;
+  /* Greyscale: emphasis carried by value, not hue. */
+  --accent: #ffffff;
 
-  --radius: 12px;
+  /* Square by default. Kept as a token so a future decision is one line. */
+  --radius: 0;
+
+  /* Page gutter. Swiss layout runs close to the trim — one narrow fluid
+     value, used by .container and nothing else. */
+  --gutter: clamp(16px, 2.2vw, 40px);
+
+  /* Width of the left-hand eyebrow column in the label/content split. */
+  --label-col: 12rem;
 
   /* --- space ------------------------------------------------------------- */
   --s-1: 0.5rem;
@@ -72,8 +84,27 @@ body {
   text-rendering: optimizeLegibility;
 }
 
+/* ==========================================================================
+   MEASURE — thin margins
+   ==========================================================================
+   Swiss layout runs close to the trim. Bootstrap's .container is a centred
+   column with wide gutters; this overrides it to near-full-bleed with one
+   narrow fluid gutter, so the rules and the grid extend almost edge to
+   edge. --gutter is the single value to change. */
+
+
+.container {
+  max-width: none;
+  width: 100%;
+  padding-left: var(--gutter);
+  padding-right: var(--gutter);
+  margin-inline: 0;
+}
+
 @media (min-width: 1200px) {
-  .container { max-width: 1380px; }
+  /* Was a 1380px centred column. Now only an upper bound on very wide
+     screens, so the layout doesn't stretch past readability. */
+  .container { max-width: 2200px; margin-inline: auto; }
 }
 
 a { color: inherit; }
@@ -168,10 +199,10 @@ p {
 
 #navigation ul li a { white-space: nowrap; }
 
-/* Stacked under the toggle on mobile. */
-@media (max-width: 767px) {
-  #navigation .navbar-collapse > div + div { margin-top: var(--s-2); }
-}
+/* Stacked under the toggle on mobile. The two groups used to be pushed
+   apart by an extra margin here, which made the gap above the phone number
+   larger than every other gap in the list. Spacing now comes from the item
+   padding alone, so every row is identical. */
 
 #navigation .logo a {
   color: inherit;
@@ -185,7 +216,11 @@ p {
   line-height: 0.4;
   margin: 0;
   padding: 0;
+  /* Explicit, so the menu doesn't rely on Bootstrap's .nav reset. */
+  list-style: none;
 }
+
+#navigation ul li { list-style: none; }
 
 #navigation ul li a {
   font-size: var(--t-meta);
@@ -240,16 +275,80 @@ p {
 }
 
 /* ==========================================================================
+   SECTION — label / content split
+   ==========================================================================
+   The characteristic Swiss arrangement: a small eyebrow sitting in a narrow
+   left column, wide content to its right, a hairline above. Below 768px the
+   two stack, because a 12rem label column on a phone leaves nothing for the
+   content. */
+
+.section {
+  display: grid;
+  grid-template-columns: var(--label-col) 1fr;
+  gap: 0 var(--s-4);
+  border-top: var(--rule-weight) solid var(--rule);
+  padding-top: var(--s-2);
+  margin-bottom: var(--s-5);
+}
+
+.section-label {
+  font-size: var(--t-meta);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin: 0;
+  max-width: none;
+}
+
+.section-body { min-width: 0; }
+
+@media (max-width: 767px) {
+  .section {
+    grid-template-columns: 1fr;
+    gap: var(--s-2) 0;
+  }
+}
+
+/* ==========================================================================
+   CLIENT STRIP
+   ==========================================================================
+   Sits between the statement and the filter bar. Set as type, not images:
+   these are wordmarks in the site's own face, which is an honest way to
+   name a client. Greyscale throughout, in line with the rest of the site —
+   the names read as a list of facts, not a logo wall. */
+
+.clients-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  /* column-gap carries the rhythm; row-gap only matters once it wraps */
+  gap: var(--s-2) var(--s-5);
+}
+
+.clients-list li {
+  font-size: var(--t-h3);
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  color: var(--ink-secondary);
+}
+
+@media (max-width: 767px) {
+  .clients-list { gap: var(--s-1) var(--s-3); }
+  .clients-list li { font-size: var(--t-body); }
+}
+
+/* ==========================================================================
    FILTERS
    ========================================================================== */
 
+/* The section wrapper now draws the rule above, so the filter row only
+   needs its own baseline. */
 #filters {
-  border-top: 1px solid var(--rule) !important;
-  border-bottom: 1px solid var(--rule) !important;
-  /* 0.6rem is var(--s-2) less 40%, tightening the gap between the rules
-     and the filter row sandwiched between them. */
-  padding: 0.6rem 0;
-  margin-bottom: var(--s-4);
+  border: 0 !important;
+  padding: 0;
+  margin-bottom: 0;
 }
 
 #filters .button {
@@ -319,6 +418,35 @@ p {
 
 #work h3,
 #work h4 { flex: 0 0 auto; }
+
+/* ---- scroll reveal -------------------------------------------------------
+   The media box wipes open from the bottom as the card enters the viewport:
+   0 to full height, one card at a time.
+
+   The clip sits on `.media`, not on the image inside it. The box keeps its
+   size throughout, so Isotope/Packery never sees a size change and the grid
+   never reflows mid-scroll. Clipping the image instead would also fight the
+   hover zoom, which transforms that same element.
+
+   `.reveal-media` is added by the IntersectionObserver in index.html, so the
+   hidden start state only ever applies when something is guaranteed to
+   reveal it. Without JS every card stays visible. */
+#work.reveal-media .media {
+  clip-path: inset(100% 0 0 0);
+  transition: clip-path 0.85s var(--ease-media);
+}
+
+#work.reveal-media .work-item.is-inview .media {
+  clip-path: inset(0 0 0 0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #work.reveal-media .media,
+  #work.reveal-media .work-item.is-inview .media {
+    clip-path: none;
+    transition: none;
+  }
+}
 
 /* Must be #work-prefixed: the base rule above carries an ID, so an
    ID-less hover selector loses the cascade and the zoom never fires. */
@@ -533,11 +661,21 @@ p {
 
   #navigation button { height: 30px; }
 
+  /* Rows are spaced by padding, not line-height, so the space above and
+     below the text can differ. --nav-row-pad is the bottom value; the top
+     is 20% more, which optically centres text that sits on a baseline. */
+  #navigation {
+    --nav-row-pad: 0.75rem;
+  }
+
   #navigation ul li a {
     font-size: 1rem;
-    line-height: 2.4;
-    border-bottom: 1px solid var(--rule);
+    line-height: 1.2;
+    padding: calc(var(--nav-row-pad) * 1.2) 0 var(--nav-row-pad);
+    border-bottom: var(--rule-weight) solid var(--rule);
     display: block;
+    /* No hover on touch, so the secondary grey buys nothing here. */
+    color: var(--ink);
   }
 
   .introduction-text { padding: var(--s-3) 0 var(--s-5); }
