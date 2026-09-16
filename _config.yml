@@ -55,9 +55,9 @@ clients:
   - { name: "UCLA", logo: "ucla.svg" }
   - { name: "APM Music", logo: "apm-music.svg" }
   - { name: "Modern Life", logo: "modern-life.svg" }
-  - { name: "FastPay" }
+  - { name: "FastPay", logo: "fastpay.svg" }
   - { name: "9Yards Capital" }
-  - { name: "True Capital", logo: "true-capital.svg" }
+  - { name: "True Capital", logo: "true-capital.svg", scale: 0.85 }
   - { name: "Lightdrop", logo: "lightdrop.svg" }
 
 # --- analytics -----------------------------------------------------------
