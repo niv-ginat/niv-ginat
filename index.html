@@ -25,7 +25,7 @@ description: Product and brand designer. Fifteen years designing the moments whe
 {% if site.clients and site.clients.size > 0 %}
 <!-- Client strip. Text lockups until real marks exist — a wordmark set in
      the site's own face is honest; a fabricated logo is not. -->
-<section id="clients" class="section section--full" aria-label="Selected clients">
+<section id="clients" class="section section--full section--no-rule" aria-label="Selected clients">
   <div class="section-body">
     <ul class="clients-list">
       {% for c in site.clients %}
@@ -44,8 +44,7 @@ description: Product and brand designer. Fifteen years designing the moments whe
 </section>
 {% endif %}
 
-<section class="section" aria-label="Filter work">
-  <p class="section-label">Work</p>
+<section class="section section--full" aria-label="Filter work">
   <div class="section-body">
     <div id="filters" class="button-group">
       {% for f in site.filters %}

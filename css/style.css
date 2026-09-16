@@ -298,6 +298,9 @@ p {
    narrow label column and be squeezed to 12rem. Collapse to one column. */
 .section--full { grid-template-columns: 1fr; }
 
+/* No hairline above — used where the section should sit unannounced. */
+.section--no-rule { border-top: 0; padding-top: 0; }
+
 .section-label {
   font-size: var(--t-meta);
   letter-spacing: 0.04em;
