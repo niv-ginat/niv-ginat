@@ -5,7 +5,7 @@ description: Product and brand designer. Fifteen years designing the moments whe
 ---
 
 <div class="row">
-  <div class="col-md-12">
+  <div class="col-lg-10">
     <div class="introduction-text">
       <h1 class="statement">
         I design the moments where people decide to commit. Fifteen years in
@@ -25,12 +25,19 @@ description: Product and brand designer. Fifteen years designing the moments whe
 {% if site.clients and site.clients.size > 0 %}
 <!-- Client strip. Text lockups until real marks exist — a wordmark set in
      the site's own face is honest; a fabricated logo is not. -->
-<section id="clients" class="section" aria-label="{{ site.clients_label }}">
-  <p class="section-label">{{ site.clients_label }}</p>
+<section id="clients" class="section section--full" aria-label="Selected clients">
   <div class="section-body">
     <ul class="clients-list">
       {% for c in site.clients %}
-      <li>{{ c.name }}</li>
+      {% comment %} A real mark when we have one; the text lockup otherwise. {% endcomment %}
+      <li{% if c.logo %} class="has-mark"{% endif %}>
+        {%- if c.logo -%}
+        <img src="/images/logos/clients/{{ c.logo }}" alt="{{ c.name }}"
+             {% if c.scale %}style="--logo-scale: {{ c.scale }}"{% endif %} />
+        {%- else -%}
+        {{ c.name }}
+        {%- endif -%}
+      </li>
       {% endfor %}
     </ul>
   </div>

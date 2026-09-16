@@ -257,7 +257,10 @@ p {
   line-height: var(--lh-snug);
   font-weight: 400;
   color: var(--ink);
-  max-width: 42ch;
+  /* No ch cap: the 10-column wrapper sets the measure now. A max-width here
+     would clamp the text narrower than the column and make the change a
+     no-op. */
+  max-width: none;
   margin: 0;
 }
 
@@ -290,6 +293,10 @@ p {
   padding-top: var(--s-2);
   margin-bottom: var(--s-5);
 }
+
+/* A section with no eyebrow: the body would otherwise auto-place into the
+   narrow label column and be squeezed to 12rem. Collapse to one column. */
+.section--full { grid-template-columns: 1fr; }
 
 .section-label {
   font-size: var(--t-meta);
@@ -333,6 +340,29 @@ p {
   letter-spacing: -0.01em;
   color: var(--ink-secondary);
 }
+
+/* Marks sit on the same optical line as the text lockups. Height-matched
+   rather than width-matched, so a square mark and a long wordmark read as
+   the same weight; --logo-scale trims the odd one that still looks off.
+   Opacity matches --ink-secondary so marks and text carry the same value. */
+.clients-list li.has-mark { display: flex; align-items: center; }
+
+.clients-list img {
+  display: block;
+  height: calc(1.5em * var(--logo-scale, 1));
+  width: auto;
+  max-width: 190px;
+  object-fit: contain;
+  /* The supplied marks are every colour going — black, near-black, brand
+     blue, brand red — and several would be invisible on this ground. This
+     flattens any of them, raster or vector, to pure white; opacity then
+     holds them just off-white, lifting to full white on hover. */
+  filter: brightness(0) invert(1);
+  opacity: 0.68;
+  transition: opacity 0.3s var(--ease);
+}
+
+.clients-list li.has-mark:hover img { opacity: 1; }
 
 @media (max-width: 767px) {
   .clients-list { gap: var(--s-1) var(--s-3); }

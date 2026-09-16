@@ -41,22 +41,24 @@ filters:
   - { label: "Brand & Identity", value: ".branding" }
   - { label: Packaging, value: ".packaging" }
   - { label: Print,     value: ".print" }
-  - { label: "UI/UX",   value: ".ux_ui" }
-  - { label: "Web Design", value: ".web_design" }
+  - { label: "Web & Product", value: ".ux_ui" }
 
 # --- client strip --------------------------------------------------------
 # Set as text for now; swap `name` for an `svg:` path per row when real
 # marks arrive. The heading is deliberately separate from the list so the
 # claim can be worded accurately — see clients_label.
-clients_label: "Selected clients"
 # Ordered by how quickly a cold visitor recognises the name, not
 # chronologically — the first two do the most work.
 clients:
-  - { name: "AT&T" }
-  - { name: "AMC" }
-  - { name: "Modern Life" }
+  - { name: "AT&T", logo: "att.svg" }
+  - { name: "AMC", logo: "amc.svg" }
+  - { name: "UCLA", logo: "ucla.svg" }
+  - { name: "APM Music", logo: "apm-music.svg" }
+  - { name: "Modern Life", logo: "modern-life.svg" }
+  - { name: "FastPay" }
   - { name: "9Yards Capital" }
-  - { name: "Lightdrop" }
+  - { name: "True Capital", logo: "true-capital.svg" }
+  - { name: "Lightdrop", logo: "lightdrop.svg" }
 
 # --- analytics -----------------------------------------------------------
 # Paste the GA4 Measurement ID here (looks like G-XXXXXXXXXX) and the tag
