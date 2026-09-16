@@ -173,6 +173,56 @@ description: Product and brand designer. Fifteen years designing the moments whe
         items.forEach(function (el) { io.observe(el); });
       })();
 
+      // ------------------------------------------------------------------
+      // Client strip: one line, stepping sideways every 2s.
+      //
+      // The list is duplicated so the track can run past the end and be
+      // snapped back to the start invisibly — without the copy you would
+      // see the row empty out before it wrapped. Each step advances by the
+      // real width of the next item, since the marks differ in width.
+      // ------------------------------------------------------------------
+      (function () {
+        var list = document.querySelector(".clients-list");
+        if (!list) return;
+        if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+        var originals = Array.prototype.slice.call(list.children);
+        if (originals.length < 3) return;
+        originals.forEach(function (el) {
+          var copy = el.cloneNode(true);
+          copy.setAttribute("aria-hidden", "true");
+          list.appendChild(copy);
+        });
+
+        var gap = parseFloat(getComputedStyle(list).columnGap) || 0;
+        var index = 0;
+        var offset = 0;
+        var SHIFT = 2000;
+        var GLIDE = 700;
+
+        function step() {
+          var leaving = list.children[index];
+          if (!leaving) return;
+          offset += leaving.getBoundingClientRect().width + gap;
+          list.style.transition = "transform " + GLIDE + "ms var(--ease-media)";
+          list.style.transform = "translateX(-" + offset + "px)";
+          index++;
+
+          // Back to the top of the loop once the originals have all left.
+          if (index >= originals.length) {
+            setTimeout(function () {
+              list.style.transition = "none";
+              list.style.transform = "translateX(0)";
+              void list.offsetWidth; // flush, so the next glide animates
+              offset = 0;
+              index = 0;
+            }, GLIDE + 40);
+          }
+        }
+
+        setInterval(step, SHIFT);
+      })();
+
       // change is-checked class on buttons
       $(".button-group").each(function (i, buttonGroup) {
         var $buttonGroup = $(buttonGroup);

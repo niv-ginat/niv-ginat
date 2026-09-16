@@ -327,15 +327,23 @@ p {
    name a client. Greyscale throughout, in line with the rest of the site —
    the names read as a list of facts, not a logo wall. */
 
+/* The strip runs as a single line that steps sideways; the body clips it
+   and the track is duplicated in JS so the loop never shows a seam. */
+#clients .section-body {
+  overflow: hidden;
+}
+
 .clients-list {
   list-style: none;
   margin: 0;
   padding: 0;
   display: flex;
-  flex-wrap: wrap;
-  /* column-gap carries the rhythm; row-gap only matters once it wraps */
+  flex-wrap: nowrap;
   gap: var(--s-2) var(--s-5);
+  will-change: transform;
 }
+
+.clients-list li { flex: 0 0 auto; }
 
 .clients-list li {
   font-size: var(--t-h3);
