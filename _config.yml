@@ -50,15 +50,15 @@ filters:
 # Ordered by how quickly a cold visitor recognises the name, not
 # chronologically — the first two do the most work.
 clients:
-  - { name: "AT&T", logo: "att.svg" }
-  - { name: "AMC", logo: "amc.svg" }
-  - { name: "UCLA", logo: "ucla.svg" }
-  - { name: "APM Music", logo: "apm-music.svg" }
-  - { name: "Modern Life", logo: "modern-life.svg" }
-  - { name: "FastPay", logo: "fastpay.svg" }
+  - { name: "AT&T", logo: "att.svg", scale: 1.02 }
+  - { name: "AMC", logo: "amc.svg", scale: 1.14 }
+  - { name: "UCLA", logo: "ucla.svg", scale: 0.95 }
+  - { name: "APM Music", logo: "apm-music.svg", scale: 1.05 }
+  - { name: "Modern Life", logo: "modern-life.svg", scale: 0.75 }
+  - { name: "FastPay", logo: "fastpay.svg", scale: 1.24 }
   - { name: "9Yards Capital" }
   - { name: "True Capital", logo: "true-capital.svg", scale: 0.85 }
-  - { name: "Lightdrop", logo: "lightdrop.svg" }
+  - { name: "Lightdrop", logo: "lightdrop.svg", scale: 0.89 }
 
 # --- analytics -----------------------------------------------------------
 # Paste the GA4 Measurement ID here (looks like G-XXXXXXXXXX) and the tag

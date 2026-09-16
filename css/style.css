@@ -349,9 +349,10 @@ p {
 
 .clients-list img {
   display: block;
+  /* Per-logo scale carries the optical balance (see _config.yml); a
+     max-width here would silently cap the widest wordmarks and undo it. */
   height: calc(1.5em * var(--logo-scale, 1));
   width: auto;
-  max-width: 190px;
   object-fit: contain;
   /* The supplied marks are every colour going — black, near-black, brand
      blue, brand red — and several would be invisible on this ground. This
