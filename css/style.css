@@ -612,7 +612,10 @@ p {
   margin-bottom: var(--s-3);
 }
 
-.project-prose p:first-child { max-width: 30ch; }
+/* The opening statement fills the 10-column wrapper, matching the home
+   page header. Body copy stays capped: at this column width it would run
+   to ~98ch, far past a readable measure. */
+.project-prose p:first-child { max-width: none; }
 
 /* everything after the opening statement drops to reading size */
 .project-prose p ~ p {
@@ -620,7 +623,7 @@ p {
   line-height: 1.5;
   letter-spacing: 0;
   color: var(--ink-secondary);
-  max-width: var(--measure);
+  max-width: 80ch;
 }
 
 .project-prose p:last-child { margin-bottom: 0; }
