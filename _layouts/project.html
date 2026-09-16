@@ -59,6 +59,24 @@ layout: default
   </div>
 </div>
 
+{% if page.video %}
+<!-- Looping clip. Sits above the stills because motion is the point on a
+     page whose argument is about states, not screens. Muted + playsinline
+     so iOS autoplays inline rather than going fullscreen. An optional
+     WebM source is supported for future use; a lone MP4 is fine, H.264
+     plays everywhere. -->
+<div id="project-video" class="row justify-content-center">
+  <div class="col-lg-10 col-12">
+    <video autoplay loop muted playsinline
+           {% if page.video_poster %}poster="{{ page.video_poster }}"{% endif %}
+           aria-label="{{ page.video_alt | default: page.title }}">
+      {% if page.video_webm %}<source src="{{ page.video_webm }}" type="video/webm" />{% endif %}
+      <source src="{{ page.video }}" type="video/mp4" />
+    </video>
+  </div>
+</div>
+{% endif %}
+
 {% if images and images.size > 0 %}
 <div id="project-gallery" class="row justify-content-center{% if page.gallery_seamless %} seamless{% endif %}">
   <div class="col-lg-10 col-12">

@@ -382,6 +382,19 @@ p {
 }
 
 /* ==========================================================================
+   PROJECT VIDEO
+   ==========================================================================
+   Matches the gallery stills exactly, so a clip and an image sit on the same
+   measure and nothing jumps when one follows the other. */
+
+#project-video video {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin-bottom: var(--s-3);
+}
+
+/* ==========================================================================
    FILTERS
    ========================================================================== */
 
