@@ -1,4 +1,8 @@
-<nav id="navigation" class="navbar-expand-md navbar-black bg-black row">
+{% comment %}
+  No bg-black here: Bootstrap paints it pure #000, which reads darker than
+  the page ground (--ground, #0b0b0b). The header inherits the body instead.
+{% endcomment %}
+<nav id="navigation" class="navbar-expand-md row">
   <div class="logo col-8">
     <a href="/" aria-label="Niv Ginat — home">
       <span class="logo-mark"></span>

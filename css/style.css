@@ -264,6 +264,40 @@ p {
   margin: 0;
 }
 
+/* --- scroll reveal -------------------------------------------------------
+   The statement holds still while the page scrolls past it, and its
+   sentences turn from faint to full one at a time. Everything here is
+   opt-in: intro-scroll.js adds .is-reveal once it knows it can run, so
+   without JS — or with reduced motion, or on a screen too short to hold
+   the block — the text simply renders at full strength. */
+
+.introduction-text.is-reveal .intro-sticky {
+  position: sticky;
+  top: 0;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+}
+
+.introduction-text.is-reveal .stmt-line {
+  color: var(--ink-faint);
+  transition: color 0.45s var(--ease);
+}
+
+.introduction-text.is-reveal .stmt-line.is-lit { color: var(--ink); }
+
+/* The underline follows the text, or it sits bright white under a faint
+   sentence and pulls the eye to the last line first. */
+.introduction-text.is-reveal .stmt-line a {
+  color: inherit;
+  border-bottom-color: currentColor;
+  transition: color 0.45s var(--ease), border-color 0.45s var(--ease);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .introduction-text.is-reveal .stmt-line { transition: none; }
+}
+
 .introduction-text h1 a {
   text-decoration: none;
   border-bottom: 2px solid var(--accent);

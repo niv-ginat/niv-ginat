@@ -25,11 +25,14 @@ copyright_start: 2019
 # --- third-party versions, in one place ---
 bootstrap_version: 5.3.3
 
-# --- projects collection: keeps existing /projects/*.html URLs ---
+# --- projects collection ---
+# Extensionless URLs (/projects/telltail). Jekyll still writes the file as
+# telltail.html, and GitHub Pages serves it at both addresses, so links
+# already out in the world keep working.
 collections:
   projects:
     output: true
-    permalink: /projects/:name.html
+    permalink: /projects/:name
 
 defaults:
   - scope: { path: "", type: "projects" }
