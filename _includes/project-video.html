@@ -1,0 +1,11 @@
+{% comment %}
+  Looping project clip. Muted + playsinline so iOS autoplays inline rather
+  than going fullscreen. An optional WebM source is supported for future
+  use; a lone MP4 is fine, H.264 plays everywhere.
+{% endcomment %}
+<video autoplay loop muted playsinline
+       {% if page.video_poster %}poster="{{ page.video_poster }}"{% endif %}
+       aria-label="{{ page.video_alt | default: page.title }}">
+  {% if page.video_webm %}<source src="{{ page.video_webm }}" type="video/webm" />{% endif %}
+  <source src="{{ page.video }}" type="video/mp4" />
+</video>

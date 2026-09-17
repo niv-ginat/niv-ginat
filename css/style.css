@@ -641,8 +641,10 @@ p {
 
 .project-prose p:last-child { margin-bottom: 0; }
 
-#project-gallery img {
+#project-gallery img,
+#project-gallery video {
   width: 100%;
+  height: auto;
   margin-bottom: var(--s-4);
   border-radius: var(--radius);
 }
@@ -761,7 +763,8 @@ p {
   .project-prose p,
   .project-prose p:first-child { max-width: none; }
 
-  #project-gallery img { margin-bottom: var(--s-3); }
+  #project-gallery img,
+  #project-gallery video { margin-bottom: var(--s-3); }
 
   .footer { margin-top: var(--s-5); }
 
