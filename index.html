@@ -65,9 +65,12 @@ description: Product and brand designer. Fifteen years designing the moments whe
   <div class="{{ p.col }} col-md-6 work-item element-item {{ p.categories | join: ' ' }} grid-item">
     <a href="{{ p.url }}">
       <div class="media"{% if p.media_scale %} style="--media-scale: {{ p.media_scale }}"{% endif %}>
-        {% if p.video %}
+        {% comment %} thumb_video lets a card run a different clip from the one
+        on its case study page; without it the card reuses page.video. {% endcomment %}
+        {% assign card_video = p.thumb_video | default: p.video %}
+        {% if card_video %}
         <video autoplay loop muted playsinline>
-          <source src="{{ p.video }}" type="video/mp4" />
+          <source src="{{ card_video }}" type="video/mp4" />
         </video>
         {% elsif p.thumb and p.thumb != "" %}
         <img src="{{ p.thumb }}" alt="{{ p.title }}" loading="lazy"{% if p.shuffle %} id="logoCollectionImage"{% endif %} />
