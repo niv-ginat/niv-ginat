@@ -1014,6 +1014,23 @@ p {
   border-bottom-right-radius: var(--radius);
 }
 
+/* An inline clip breaks the scroll in two: the screen above closes off its
+   corners and gap, the screen below opens with rounded corners again. */
+#project-gallery.seamless img:has(+ video) {
+  margin-bottom: var(--s-4);
+  border-bottom-left-radius: var(--radius);
+  border-bottom-right-radius: var(--radius);
+}
+
+#project-gallery.seamless video + img {
+  border-top-left-radius: var(--radius);
+  border-top-right-radius: var(--radius);
+}
+
+@media (max-width: 767px) {
+  #project-gallery.seamless img:has(+ video) { margin-bottom: var(--s-3); }
+}
+
 /* ==========================================================================
    LOGO MARK — 32-frame horizontal sprite, stepped like a photocopier
    ========================================================================== */
