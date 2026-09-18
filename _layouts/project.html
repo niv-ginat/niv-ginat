@@ -63,6 +63,16 @@ layout: default
   </div>
 </div>
 
+<!-- hero_video always opens the page, independent of page.video. That lets
+     a case study run one clip up top and another inside the gallery. -->
+{% if page.hero_video %}
+<div id="project-hero-video" class="row justify-content-center">
+  <div class="col-lg-10 col-12">
+    {% include project-video.html src=page.hero_video alt=page.hero_video_alt %}
+  </div>
+</div>
+{% endif %}
+
 <!-- The clip sits above the stills by default. A "video" entry in the
      gallery list places it at that position instead. -->
 {% assign video_inline = false %}

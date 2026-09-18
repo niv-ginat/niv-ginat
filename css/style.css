@@ -421,6 +421,7 @@ p {
    Matches the gallery stills exactly, so a clip and an image sit on the same
    measure and nothing jumps when one follows the other. */
 
+#project-hero-video video,
 #project-video video {
   display: block;
   width: 100%;
