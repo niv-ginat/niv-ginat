@@ -624,7 +624,10 @@ p {
 
 /* --- metadata row: CLIENT / ROLE / CAPABILITIES / YEAR --- */
 
+/* Zero gutter: a .row's negative margins would push the rule past the text
+   and image edges; with no gutter it starts and ends exactly on them. */
 .project-meta {
+  --bs-gutter-x: 0;
   padding-bottom: var(--s-5);
   margin-bottom: var(--s-5);
   border-bottom: 1px solid var(--rule);
@@ -659,9 +662,8 @@ p {
   margin-bottom: var(--s-3);
 }
 
-/* The opening statement fills the 10-column wrapper, matching the home
-   page header. Body copy stays capped: at this column width it would run
-   to ~98ch, far past a readable measure. */
+/* The opening statement and the body copy both fill the 10-column wrapper,
+   so the text edges line up with the images below. */
 .project-prose p:first-child { max-width: none; }
 
 /* everything after the opening statement drops to reading size */
@@ -670,7 +672,7 @@ p {
   line-height: 1.5;
   letter-spacing: 0;
   color: var(--ink-secondary);
-  max-width: 80ch;
+  max-width: none;
 }
 
 .project-prose p:last-child { margin-bottom: 0; }

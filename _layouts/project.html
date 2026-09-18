@@ -14,13 +14,17 @@ layout: default
 {% endif %}
 
 {% if page.cover %}
-<div id="project-introduction">
-  <img src="{{ page.cover }}" alt="{{ page.title }}" />
+<div id="project-introduction" class="row justify-content-center">
+  <div class="col-lg-10 col-12">
+    <img src="{{ page.cover }}" alt="{{ page.title }}" />
+  </div>
 </div>
 {% endif %}
 
-<div id="project-description" class="row">
-  <div class="col-lg-10">
+<!-- Same centred 10-column box as the cover, clip and gallery, so the text
+     edges line up with the image edges on every case study. -->
+<div id="project-description" class="row justify-content-center">
+  <div class="col-lg-10 col-12">
 
   <div class="project-meta row">
     <div class="col-6 col-md-3">
