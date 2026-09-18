@@ -20,7 +20,9 @@
 <meta name="google-site-verification" content="{{ site.google_site_verification }}" />
 {% endif %}
 
-<link rel="stylesheet" href="/css/style.css" />
+<!-- Stamped with the build time: Pages caches CSS for 10 minutes, so without
+     this a fresh deploy can render new markup against the old stylesheet. -->
+<link rel="stylesheet" href="/css/style.css?v={{ site.time | date: '%s' }}" />
 
 {% if site.google_analytics != blank %}
 <!-- Google Analytics 4. Only rendered when google_analytics is set in
