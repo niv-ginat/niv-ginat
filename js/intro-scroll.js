@@ -6,9 +6,18 @@
    read inside requestAnimationFrame, so a fast scroll costs one read per
    frame rather than one per event.
 
-   It stays off unless it can behave: no reduced-motion preference, and a
-   viewport tall enough to hold the statement with room to breathe. Off
-   means the markup renders as ordinary text at full strength.
+   Where it fits, the header is held for the same stretch: the statement pins
+   directly under it from the first pixel of scroll, so the opening screen —
+   header and statement together — is what stays put, and the two release
+   and scroll away together. The header is outside the statement's section,
+   so CSS sticky can't bound it to the pin; it is moved with a transform
+   instead, by exactly the distance scrolled, until the pin ends.
+
+   Where the statement is too tall to sit under the header (small phones), it
+   falls back to pinning at the top of the viewport on its own. It stays off
+   entirely unless it can behave: no reduced-motion preference, and a
+   viewport tall enough to hold the statement. Off means the markup renders
+   as ordinary text at full strength.
    ------------------------------------------------------------------------- */
 (function () {
   var section = document.querySelector("[data-intro-scroll]");
@@ -18,6 +27,7 @@
   var lines = Array.prototype.slice.call(section.querySelectorAll(".stmt-line"));
   if (!sticky || lines.length === 0) return;
 
+  var nav = document.getElementById("navigation");
   var reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
 
   // Scroll distance per sentence, as a share of viewport height. Lower feels
@@ -26,17 +36,15 @@
   // The last sentence lights at this point of the pin, leaving a beat at full
   // strength before the block releases.
   var FINISH = 0.88;
+  // Breathing room the statement needs inside whatever space it pins into.
+  var SLACK = 24;
 
   var enabled = false;
+  var holdNav = false;
+  var pinStart = 0; // scrollY at which the pin engages
+  var travel = 0;   // scroll distance the pin lasts
   var lit = -1;
   var ticking = false;
-
-  function fits() {
-    // The statement has to fit the viewport, or pinning would hide its own
-    // last lines. The allowance is small so phones, where the block nearly
-    // fills the screen, still get the effect.
-    return !reduced.matches && sticky.scrollHeight <= window.innerHeight - 24;
-  }
 
   function lightUpTo(count) {
     if (count === lit) return;
@@ -50,11 +58,12 @@
     ticking = false;
     if (!enabled) return;
 
-    var rect = section.getBoundingClientRect();
-    var travel = section.offsetHeight - window.innerHeight;
-    if (travel <= 0) return lightUpTo(lines.length);
+    var scrolled = Math.min(Math.max(window.scrollY - pinStart, 0), travel);
 
-    var progress = Math.min(Math.max(-rect.top / travel, 0), 1);
+    // Hold the header in place for the length of the pin, then let it go.
+    if (holdNav) nav.style.transform = "translate3d(0," + scrolled + "px,0)";
+
+    var progress = travel > 0 ? scrolled / travel : 1;
     var reached = Math.floor((progress / FINISH) * lines.length) + 1;
     lightUpTo(Math.min(Math.max(reached, 0), lines.length));
   }
@@ -65,37 +74,67 @@
     window.requestAnimationFrame(update);
   }
 
-  function enable() {
-    enabled = true;
-    section.classList.add("is-reveal");
-    section.style.height =
-      window.innerHeight + lines.length * STEP * window.innerHeight + "px";
-    update();
+  function reset() {
+    enabled = false;
+    holdNav = false;
+    section.classList.remove("is-reveal");
+    section.style.height = "";
+    sticky.style.top = "";
+    sticky.style.minHeight = "";
+    if (nav) nav.style.transform = "";
   }
 
   function disable() {
-    enabled = false;
-    section.classList.remove("is-reveal");
-    section.style.height = "";
+    reset();
     lit = -1;
     lines.forEach(function (el) { el.classList.remove("is-lit"); });
   }
 
   function measure() {
-    // Measure unpinned: the height set above would otherwise be measured.
-    var was = enabled;
-    if (was) {
-      section.style.height = "";
-      section.classList.remove("is-reveal");
+    // Measure unpinned and unshifted, or the values set below would be
+    // measured instead of the natural layout.
+    reset();
+    if (reduced.matches) return disable();
+
+    var vh = window.innerHeight;
+    var blockH = sticky.scrollHeight;
+    // The statement's own position in the document with nothing pinned —
+    // i.e. just under the header.
+    var stickyTop = sticky.getBoundingClientRect().top + window.scrollY;
+
+    var top;
+    if (nav && blockH <= vh - stickyTop - SLACK) {
+      top = stickyTop; // pin under the header, from scroll 0
+      holdNav = true;
+    } else if (blockH <= vh - SLACK) {
+      top = 0;         // pin alone at the top of the viewport
+    } else {
+      return disable();
     }
-    var ok = fits();
-    if (was) section.classList.add("is-reveal");
-    if (ok) enable();
-    else disable();
+
+    var cs = window.getComputedStyle(section);
+    var pad = parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom);
+    var frame = vh - top;
+
+    travel = lines.length * STEP * vh;
+    pinStart = stickyTop - top;
+
+    enabled = true;
+    section.classList.add("is-reveal");
+    sticky.style.top = top + "px";
+    sticky.style.minHeight = frame + "px";
+    // Border-box: the section holds its padding, one pinned frame, and the
+    // scroll distance the pin lasts.
+    section.style.height = pad + frame + travel + "px";
+    update();
   }
 
   measure();
   window.addEventListener("scroll", onScroll, { passive: true });
   window.addEventListener("resize", measure);
   if (reduced.addEventListener) reduced.addEventListener("change", measure);
+  // Opening the mobile menu changes the header's height, and with it where
+  // the statement sits.
+  document.addEventListener("shown.bs.collapse", measure);
+  document.addEventListener("hidden.bs.collapse", measure);
 })();
