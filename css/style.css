@@ -258,9 +258,15 @@ p {
 
 .intro-sticky { position: relative; }
 
+/* Centred on the screen, not on the ten-column text block, which sits left
+   of centre. intro-scroll.js measures the offset from the column's left edge
+   to the page edge and hands it over as --intro-inset. */
 .intro-media {
   position: absolute;
-  inset: 0;
+  top: 0;
+  bottom: 0;
+  left: calc(-1 * var(--intro-inset, 0px));
+  width: var(--intro-vw, 100vw);
   display: grid;
   place-items: center;
   z-index: 0;
@@ -269,7 +275,7 @@ p {
 }
 
 .intro-media img {
-  width: min(32%, 360px);
+  width: min(30vw, 420px);
   /* Explicit, because the width/height attributes (there to reserve space
      before the file loads) would otherwise fix the height at its natural
      pixel size and aspect-ratio would never apply. */
@@ -281,7 +287,7 @@ p {
 }
 
 @media (max-width: 767px) {
-  .intro-media img { width: min(58%, 280px); opacity: 0.3; }
+  .intro-media img { width: min(62vw, 300px); opacity: 0.32; }
 }
 
 /* One continuous block, every word the same size — no display headline

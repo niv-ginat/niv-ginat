@@ -39,15 +39,16 @@
   var FINISH = 0.88;
   // Breathing room the statement needs inside whatever space it pins into.
   var SLACK = 24;
-  // How far the artwork drifts over the whole pin, as a share of viewport
-  // height. It travels against the scroll, so the frame is still but the
-  // image is not — parallax without a moving background.
-  var DRIFT = 0.16;
+  // How much of the artwork shows at the foot of the screen when the pin
+  // starts. It rises from there and clears the top as the last line lights,
+  // so the frame is still but the image is not.
+  var PEEK = 0.22;
 
   var enabled = false;
   var holdNav = false;
   var pinStart = 0; // scrollY at which the pin engages
   var travel = 0;   // scroll distance the pin lasts
+  var frameH = 0;   // height of the pinned frame
   var lit = -1;
   var ticking = false;
 
@@ -70,12 +71,16 @@
 
     var progress = travel > 0 ? scrolled / travel : 1;
 
-    // Artwork drifts upward across the pin, from half its range below centre
-    // to half above.
+    // Artwork climbs the full height of the frame: a slice showing at the
+    // bottom when the pin starts, gone past the top when it ends. The image
+    // is centred in the frame by CSS, so these are offsets from that.
     if (media) {
-      var range = DRIFT * window.innerHeight;
+      var imgH = media.offsetHeight;
+      var centred = (frameH - imgH) / 2;
+      var from = frameH - PEEK * frameH; // top edge, barely on screen
+      var to = -imgH - 8;                // just past the top, edge and all
       media.style.transform =
-        "translate3d(0," + ((0.5 - progress) * range).toFixed(1) + "px,0)";
+        "translate3d(0," + (from + (to - from) * progress - centred).toFixed(1) + "px,0)";
     }
 
     var reached = Math.floor((progress / FINISH) * lines.length) + 1;
@@ -109,6 +114,16 @@
     // Measure unpinned and unshifted, or the values set below would be
     // measured instead of the natural layout.
     reset();
+
+    // Hand the artwork the page edges, so it can centre on the screen rather
+    // than on the text column. clientWidth, not 100vw, which counts the
+    // scrollbar and would push it off-centre. Set before any early return:
+    // the image is centred on the screen whether or not the reveal runs.
+    if (media) {
+      section.style.setProperty("--intro-inset", sticky.getBoundingClientRect().left + "px");
+      section.style.setProperty("--intro-vw", document.documentElement.clientWidth + "px");
+    }
+
     if (reduced.matches) return disable();
 
     var vh = window.innerHeight;
@@ -133,6 +148,7 @@
 
     travel = lines.length * STEP * vh;
     pinStart = stickyTop - top;
+    frameH = frame;
 
     enabled = true;
     section.classList.add("is-reveal");
