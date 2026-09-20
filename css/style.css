@@ -250,9 +250,45 @@ p {
   max-width: var(--measure);
 }
 
+/* --- artwork behind the statement ----------------------------------------
+   A single portrait image, centred in the pinned frame and held under the
+   text. It drifts against the scroll while the statement lights (see
+   intro-scroll.js); with no script it simply sits still. Dimmed hard,
+   because the faint state of the text has to stay readable over it. */
+
+.intro-sticky { position: relative; }
+
+.intro-media {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.intro-media img {
+  width: min(32%, 360px);
+  /* Explicit, because the width/height attributes (there to reserve space
+     before the file loads) would otherwise fix the height at its natural
+     pixel size and aspect-ratio would never apply. */
+  height: auto;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  opacity: 0.5;
+  filter: brightness(0.85);
+}
+
+@media (max-width: 767px) {
+  .intro-media img { width: min(58%, 280px); opacity: 0.3; }
+}
+
 /* One continuous block, every word the same size — no display headline
    sitting above smaller supporting paragraphs. */
 .introduction-text .statement {
+  position: relative;
+  z-index: 1;
   font-size: var(--t-h2);
   line-height: var(--lh-snug);
   font-weight: 400;

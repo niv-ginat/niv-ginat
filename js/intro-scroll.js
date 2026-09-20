@@ -28,6 +28,7 @@
   if (!sticky || lines.length === 0) return;
 
   var nav = document.getElementById("navigation");
+  var media = section.querySelector(".intro-media img");
   var reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
 
   // Scroll distance per sentence, as a share of viewport height. Lower feels
@@ -38,6 +39,10 @@
   var FINISH = 0.88;
   // Breathing room the statement needs inside whatever space it pins into.
   var SLACK = 24;
+  // How far the artwork drifts over the whole pin, as a share of viewport
+  // height. It travels against the scroll, so the frame is still but the
+  // image is not — parallax without a moving background.
+  var DRIFT = 0.16;
 
   var enabled = false;
   var holdNav = false;
@@ -64,6 +69,15 @@
     if (holdNav) nav.style.transform = "translate3d(0," + scrolled + "px,0)";
 
     var progress = travel > 0 ? scrolled / travel : 1;
+
+    // Artwork drifts upward across the pin, from half its range below centre
+    // to half above.
+    if (media) {
+      var range = DRIFT * window.innerHeight;
+      media.style.transform =
+        "translate3d(0," + ((0.5 - progress) * range).toFixed(1) + "px,0)";
+    }
+
     var reached = Math.floor((progress / FINISH) * lines.length) + 1;
     lightUpTo(Math.min(Math.max(reached, 0), lines.length));
   }
@@ -82,6 +96,7 @@
     sticky.style.top = "";
     sticky.style.minHeight = "";
     if (nav) nav.style.transform = "";
+    if (media) media.style.transform = "";
   }
 
   function disable() {
