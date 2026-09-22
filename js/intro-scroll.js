@@ -49,6 +49,7 @@
   var pinStart = 0; // scrollY at which the pin engages
   var travel = 0;   // scroll distance the pin lasts
   var frameH = 0;   // height of the pinned frame
+  var boxH = 0;     // height of the artwork's box: the whole screen
   var lit = -1;
   var ticking = false;
 
@@ -71,14 +72,15 @@
 
     var progress = travel > 0 ? scrolled / travel : 1;
 
-    // Artwork climbs the full height of the frame: a slice showing at the
-    // bottom when the pin starts, gone past the top when it ends. The image
-    // is centred in the frame by CSS, so these are offsets from that.
+    // Artwork climbs the whole screen: a slice showing at the bottom when the
+    // pin starts, gone past the top when it ends. Its box runs from the top
+    // of the screen to the foot of the frame and the image is centred in it,
+    // so these are offsets from that centre.
     if (media) {
       var imgH = media.offsetHeight;
-      var centred = (frameH - imgH) / 2;
-      var from = frameH - PEEK * frameH; // top edge, barely on screen
-      var to = -imgH - 8;                // just past the top, edge and all
+      var centred = (boxH - imgH) / 2;
+      var from = boxH - PEEK * boxH; // top edge, barely on screen
+      var to = -imgH - 8;            // just past the top, edge and all
       media.style.transform =
         "translate3d(0," + (from + (to - from) * progress - centred).toFixed(1) + "px,0)";
     }
@@ -101,7 +103,10 @@
     sticky.style.top = "";
     sticky.style.minHeight = "";
     if (nav) nav.style.transform = "";
-    if (media) media.style.transform = "";
+    if (media) {
+      media.style.transform = "";
+      section.style.removeProperty("--intro-top");
+    }
   }
 
   function disable() {
@@ -149,6 +154,9 @@
     travel = lines.length * STEP * vh;
     pinStart = stickyTop - top;
     frameH = frame;
+    boxH = vh;
+    // Let the artwork's box reach the top of the screen, past the header.
+    if (media) section.style.setProperty("--intro-top", top + "px");
 
     enabled = true;
     section.classList.add("is-reveal");

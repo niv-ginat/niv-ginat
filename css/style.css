@@ -173,6 +173,10 @@ p {
   padding-top: 30px;
   padding-bottom: 30px;
   margin-bottom: 40px;
+  /* Above the intro artwork, which climbs the full height of the screen and
+     would otherwise paint over the logo and the links on its way past. */
+  position: relative;
+  z-index: 2;
 }
 
 #navigation .collapse { align-items: inherit; }
@@ -263,7 +267,10 @@ p {
    to the page edge and hands it over as --intro-inset. */
 .intro-media {
   position: absolute;
-  top: 0;
+  /* Up past the header to the top of the screen. The box is what clips the
+     image, so stopping at the pinned frame would cut it off mid-climb.
+     --intro-top is the frame's distance from the top, set in JS. */
+  top: calc(-1 * var(--intro-top, 0px));
   bottom: 0;
   left: calc(-1 * var(--intro-inset, 0px));
   width: var(--intro-vw, 100vw);
@@ -282,8 +289,8 @@ p {
   height: auto;
   aspect-ratio: 3 / 4;
   object-fit: cover;
-  opacity: 0.5;
-  filter: brightness(0.85);
+  opacity: 0.45;
+  filter: brightness(0.62);
 }
 
 @media (max-width: 767px) {
