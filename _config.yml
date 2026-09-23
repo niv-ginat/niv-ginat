@@ -47,9 +47,12 @@ filters:
   - { label: "Web & Product", value: ".ux_ui" }
 
 # --- client strip --------------------------------------------------------
-# Set as text for now; swap `name` for an `svg:` path per row when real
-# marks arrive. The heading is deliberately separate from the list so the
-# claim can be worded accurately — see clients_label.
+# A row without a `logo` falls back to the name set in the site's own face —
+# honest, and better than a mark we had to invent. Every row carries a real
+# one now; the fallback is there for the next client.
+# `scale` trims the odd mark that still reads heavy or light once the strip
+# has height-matched it — a lockup with a second line (9Yards) loses height
+# to it and needs winding back up.
 # Ordered by how quickly a cold visitor recognises the name, not
 # chronologically — the first two do the most work.
 clients:
@@ -57,9 +60,10 @@ clients:
   - { name: "AMC", logo: "amc.svg", scale: 1.14 }
   - { name: "UCLA", logo: "ucla.svg", scale: 0.95 }
   - { name: "APM Music", logo: "apm-music.svg", scale: 1.05 }
+  - { name: "ClimateCheck", logo: "climatecheck.svg", scale: 0.95 }
   - { name: "Modern Life", logo: "modern-life.svg", scale: 0.75 }
   - { name: "FastPay", logo: "fastpay.svg", scale: 1.24 }
-  - { name: "9Yards Capital" }
+  - { name: "9Yards Capital", logo: "9yards-capital.svg", scale: 1.25 }
   - { name: "True Capital", logo: "true-capital.svg", scale: 0.85 }
   - { name: "Lightdrop", logo: "lightdrop.svg", scale: 0.89 }
 
