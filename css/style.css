@@ -520,8 +520,10 @@ p {
    shorter image instead of pushing its rule out of alignment. Cards are sized,
    not their images, so no per-column aspect ratios are needed. */
 /* Sized so the media box lands near the original site's hero cards (the
-   16/9 col-lg-8 came out ~500px tall at a 1380px container). */
-#work { --card-h: clamp(400px, 40vw, 620px); }
+   16/9 col-lg-8 came out ~500px tall at a 1380px container), then taken up
+   a further 10% — every stop scaled together so the card grows at the same
+   rate whether it is the floor, the viewport track or the ceiling holding it. */
+#work { --card-h: clamp(484px, 48.4vw, 750px); }
 
 .work-item { margin-bottom: var(--s-4); }
 
@@ -558,6 +560,11 @@ p {
 #work h3,
 #work h4 { flex: 0 0 auto; }
 
+/* A card with no capability line still has to hold its line box. Without
+   this the empty h4 collapses, the media box above it takes up the slack
+   and the rule under it drops out of line with the rest of the row. */
+#work h4:empty::before { content: "\00a0"; }
+
 /* ---- scroll reveal -------------------------------------------------------
    The media box wipes open from the bottom as the card enters the viewport:
    0 to full height, one card at a time.
@@ -585,6 +592,75 @@ p {
     clip-path: none;
     transition: none;
   }
+}
+
+/* ---- logo shuffle ------------------------------------------------------
+   The Logo Collection card swaps its artwork on a timer. A bare src swap
+   cuts hard, so each new mark rises a few pixels out of a blur instead.
+
+   Animated with `translate` and `filter`, never `transform`: the hover zoom
+   above owns transform, and a keyframe touching it would cancel the zoom
+   mid-hover.
+
+   The three values below are the whole effect. Rise 0 leaves a blur
+   dissolve; blur 0 leaves a slide; both 0 leaves a plain crossfade. */
+#work {
+  --logo-swap-ms: 260ms;
+  --logo-swap-rise: 8px;
+  --logo-swap-blur: 5px;
+}
+
+@keyframes logo-swap {
+  from {
+    opacity: 0;
+    translate: 0 var(--logo-swap-rise);
+    filter: blur(var(--logo-swap-blur));
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+    filter: blur(0);
+  }
+}
+
+/* The marks are opaque white JPEG-style plates, not cut-outs. Fading or
+   blurring one over the near-black ground let the ground show through and
+   the whole panel dipped grey — read as a flash. A white plate behind the
+   image means everything revealed mid-swap is white: only the mark itself
+   moves. */
+#work .media--plate { background-color: #fff; }
+
+/* Temporary cards ---------------------------------------------------------
+   A card flagged `temporary: true` is on the grid to be judged, not because
+   it is signed off. The badge is deliberately the one solid white block on
+   an otherwise greyscale page: it should read as a marker sitting on top of
+   the work, not as part of it, so it is obvious what still has to come off.
+   It anchors to .media rather than the card so it rides the artwork's edge
+   whatever the column span, and it is inert to the pointer so the whole
+   card stays one link. */
+#work .work-item.is-temporary .media { position: relative; }
+
+#work .temp-badge {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  padding: 0.4em 0.7em;
+  background: var(--accent);
+  color: var(--ground);
+  font-size: var(--t-meta);
+  line-height: 1;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  pointer-events: none;
+}
+
+#logoCollectionImage.is-swapping {
+  animation: logo-swap var(--logo-swap-ms) var(--ease-media) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #logoCollectionImage.is-swapping { animation: none; }
 }
 
 /* Must be #work-prefixed: the base rule above carries an ID, so an
@@ -838,7 +914,7 @@ p {
   .work-item { margin-bottom: var(--s-3); }
 
   /* Single column on mobile, so every piece gets the same height. */
-  #work { --card-h: 340px; }
+  #work { --card-h: 411px; }
 
   #work h4 { margin-bottom: 0; }
 
@@ -1032,8 +1108,7 @@ p {
 /* Placeholder for a card whose artwork hasn't landed yet — keeps the grid
    whole instead of rendering a broken image. */
 #work .media-placeholder {
-  flex: 1 1 auto;
-  min-height: 0;
+  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1041,7 +1116,6 @@ p {
   gap: 0.4rem;
   border: 1px dashed var(--ink-faint);
   border-radius: var(--radius);
-  margin-bottom: var(--s-2);
   color: var(--ink-secondary);
   font-size: var(--t-h3);
 }

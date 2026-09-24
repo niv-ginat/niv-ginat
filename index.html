@@ -71,9 +71,13 @@ description: Product and brand designer in Los Angeles. I design brands and the 
 <div id="work" class="row grid">
   {% assign items = site.projects | where_exp: "p", "p.hidden != true" | sort: "order" %}
   {% for p in items %}
-  <div class="{{ p.col }} col-md-6 work-item element-item {{ p.categories | join: ' ' }} grid-item">
+  <div class="{{ p.col }} col-md-6 work-item element-item {{ p.categories | join: ' ' }} grid-item{% if p.temporary %} is-temporary{% endif %}">
     <a href="{{ p.url }}">
-      <div class="media"{% if p.media_scale %} style="--media-scale: {{ p.media_scale }}"{% endif %}>
+      <div class="media{% if p.shuffle %} media--plate{% endif %}"{% if p.media_scale %} style="--media-scale: {{ p.media_scale }}"{% endif %}>
+        {% comment %} A card carrying `temporary: true` is on the grid to be
+        judged, not because it is finished. The badge says so out loud so a
+        placeholder is never mistaken for the work itself. {% endcomment %}
+        {%- if p.temporary %}<span class="temp-badge">Temporary</span>{% endif -%}
         {% comment %} thumb_video lets a card run a different clip from the one
         on its case study page; without it the card reuses page.video. {% endcomment %}
         {% assign card_video = p.thumb_video | default: p.video %}
