@@ -9,9 +9,14 @@
    Where it fits, the header is held for the same stretch: the statement pins
    directly under it from the first pixel of scroll, so the opening screen —
    header and statement together — is what stays put, and the two release
-   and scroll away together. The header is outside the statement's section,
-   so CSS sticky can't bound it to the pin; it is moved with a transform
-   instead, by exactly the distance scrolled, until the pin ends.
+   and scroll away together. The header is held by CSS sticky, not by a
+   transform driven from the scroll handler: the page scrolls on the
+   compositor, so a per-frame transform posted from the main thread always
+   lands a frame late and the header visibly chases the scroll. Small crisp
+   text shows that lag far more than a photograph does. Sticky cannot be
+   bounded to the pin here — the header sits outside the statement's section
+   — so the release is done by swapping sticky for one fixed offset, once,
+   at the end of the pin. Nothing is written per frame either side of it.
 
    Where the statement is too tall to sit under the header (small phones), it
    falls back to pinning at the top of the viewport on its own. It stays off
@@ -50,8 +55,22 @@
   var travel = 0;   // scroll distance the pin lasts
   var frameH = 0;   // height of the pinned frame
   var boxH = 0;     // height of the artwork's box: the whole screen
+  var navTop = 0;   // the header's own place in the document
+  var navFree = false; // true once the header has been let go
   var lit = -1;
   var ticking = false;
+
+  // Sticky holds the header for the length of the pin; past that it has to
+  // travel with the page again. The swap keeps it in the same place on the
+  // screen at the boundary: stuck it sits at navTop, and in flow shifted by
+  // travel it sits at navTop + travel - scrollY, which is navTop at exactly
+  // the scroll position where the pin ends.
+  function setNavFree(free) {
+    if (free === navFree) return;
+    navFree = free;
+    nav.style.position = free ? "relative" : "sticky";
+    nav.style.transform = free ? "translate3d(0," + travel + "px,0)" : "";
+  }
 
   function lightUpTo(count) {
     if (count === lit) return;
@@ -68,7 +87,9 @@
     var scrolled = Math.min(Math.max(window.scrollY - pinStart, 0), travel);
 
     // Hold the header in place for the length of the pin, then let it go.
-    if (holdNav) nav.style.transform = "translate3d(0," + scrolled + "px,0)";
+    // This only writes at the boundary, so the held header is left entirely
+    // to the compositor and cannot lag the scroll.
+    if (holdNav) setNavFree(scrolled >= travel);
 
     var progress = travel > 0 ? scrolled / travel : 1;
 
@@ -102,7 +123,12 @@
     section.style.height = "";
     sticky.style.top = "";
     sticky.style.minHeight = "";
-    if (nav) nav.style.transform = "";
+    if (nav) {
+      nav.style.position = "";
+      nav.style.top = "";
+      nav.style.transform = "";
+      navFree = false;
+    }
     if (media) {
       media.style.transform = "";
       section.style.removeProperty("--intro-top");
@@ -141,6 +167,7 @@
     if (nav && blockH <= vh - stickyTop - SLACK) {
       top = stickyTop; // pin under the header, from scroll 0
       holdNav = true;
+      navTop = nav.getBoundingClientRect().top + window.scrollY;
     } else if (blockH <= vh - SLACK) {
       top = 0;         // pin alone at the top of the viewport
     } else {
@@ -159,6 +186,12 @@
     if (media) section.style.setProperty("--intro-top", top + "px");
 
     enabled = true;
+    // Sticky rather than a transform, and it leaves the header in flow, so
+    // nothing below it shifts and no placeholder is needed.
+    if (holdNav) {
+      nav.style.position = "sticky";
+      nav.style.top = navTop + "px";
+    }
     section.classList.add("is-reveal");
     sticky.style.top = top + "px";
     sticky.style.minHeight = frame + "px";
