@@ -90,7 +90,19 @@ layout: default
 <div id="project-gallery" class="row justify-content-center{% if page.gallery_seamless %} seamless{% endif %}">
   <div class="col-lg-10 col-12">
     {% for img in images %}
-      {% if img == "video" %}
+      {% comment %}
+        A nested list inside "gallery" renders as one row of side-by-side
+        images. Crop the members to the same aspect ratio so the row is even.
+      {% endcomment %}
+      {% if img.first %}
+    <div class="row gallery-pair">
+        {% for sub in img %}
+      <div class="col-12 col-md-6">
+        <img src="{{ sub }}" alt="{{ page.title }}" loading="lazy" />
+      </div>
+        {% endfor %}
+    </div>
+      {% elsif img == "video" %}
         {% if page.video %}{% include project-video.html %}{% endif %}
       {% else %}
     <img src="{{ img }}" alt="{{ page.title }}" loading="lazy" />

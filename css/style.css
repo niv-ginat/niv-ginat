@@ -1167,8 +1167,17 @@ p {
    ========================================================================== */
 
 .logo-mark {
+  /* Each sprite frame is 508px wide and the wordmark's "n" starts 73px in,
+     so the mark used to sit ~14% of its own width to the right of the text
+     below it. Pull the box left by that exact fraction and the resting frame
+     lines up; --logo-w is the one value to change, and the offset follows it
+     at every breakpoint. The jitter frames still swing past the line on the
+     left, which is the photocopier effect doing its job. */
+  --logo-w: 180px;
+  --logo-inset: 0.1437; /* 73 / 508 */
   display: block;
-  width: 180px;
+  width: var(--logo-w);
+  margin-left: calc(var(--logo-w) * var(--logo-inset) * -1);
   aspect-ratio: 508 / 184;
   background-image: url('/images/logos/nivginat-sprite.webp');
   background-repeat: no-repeat;
@@ -1193,5 +1202,6 @@ p {
 }
 
 @media (max-width: 767px) {
-  .logo-mark { width: 150px; }
+  /* Width only — the left offset is derived from it. */
+  .logo-mark { --logo-w: 150px; }
 }
