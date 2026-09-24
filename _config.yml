@@ -56,13 +56,13 @@ filters:
 # Ordered by how quickly a cold visitor recognises the name, not
 # chronologically — the first two do the most work.
 clients:
-  - { name: "AT&T", logo: "att.svg", scale: 1.02 }
-  - { name: "AMC", logo: "amc.svg", scale: 1.14 }
+  - { name: "AT&T", logo: "att.svg", scale: 1.12 }
+  - { name: "AMC", logo: "amc.svg", scale: 1.25 }
   - { name: "UCLA", logo: "ucla.svg", scale: 0.95 }
   - { name: "APM Music", logo: "apm-music.svg", scale: 1.05 }
-  - { name: "ClimateCheck", logo: "climatecheck.svg", scale: 0.95 }
+  - { name: "ClimateCheck", logo: "climatecheck.svg", scale: 0.554 }
   - { name: "Modern Life", logo: "modern-life.svg", scale: 0.75 }
-  - { name: "FastPay", logo: "fastpay.svg", scale: 1.24 }
+  - { name: "FastPay", logo: "fastpay.svg", scale: 1.43 }
   - { name: "9Yards Capital", logo: "9yards-capital.svg", scale: 1.25 }
   - { name: "True Capital", logo: "true-capital.svg", scale: 0.85 }
   - { name: "Lightdrop", logo: "lightdrop.svg", scale: 0.89 }
