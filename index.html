@@ -56,6 +56,9 @@ description: Product and brand designer in Los Angeles. I design brands and the 
 <div id="work" class="row grid">
   {% assign items = site.projects | where_exp: "p", "p.hidden != true" | sort: "order" %}
   {% for p in items %}
+  {% comment %} Groups switched off in _config.yml (project_groups) drop out
+  of the grid as a block. {% endcomment %}
+  {% if p.group and site.project_groups[p.group] == false %}{% continue %}{% endif %}
   <div class="{{ p.col }} col-md-6 work-item element-item {{ p.categories | join: ' ' }} grid-item{% if p.temporary %} is-temporary{% endif %}">
     <a href="{{ p.url }}">
       <div class="media{% if p.shuffle %} media--plate{% endif %}"{% if p.media_scale %} style="--media-scale: {{ p.media_scale }}"{% endif %}>

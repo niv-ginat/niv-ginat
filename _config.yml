@@ -69,6 +69,13 @@ clients:
   - { name: "Greenhouse", logo: "greenhouse.svg", scale: 0.9 }
   - { name: "The Museum Collective", logo: "museum-collective.svg", scale: 1.35 }
 
+# --- project groups ---------------------------------------------------------
+# Switch a whole group of projects on or off at once. A project joins a group
+# with `group: <name>` in its front matter. false hides every project in the
+# group from the homepage grid (their pages still exist at their URLs).
+project_groups:
+  partner: true   # Blumenes, Aubrey Kathryn
+
 # --- analytics -----------------------------------------------------------
 # Paste the GA4 Measurement ID here (looks like G-XXXXXXXXXX) and the tag
 # loads on every page. Leave empty and nothing is injected at all — no
