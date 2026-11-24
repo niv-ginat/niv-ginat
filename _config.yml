@@ -66,6 +66,8 @@ clients:
   - { name: "9Yards Capital", logo: "9yards-capital.svg", scale: 1.25 }
   - { name: "True Capital", logo: "true-capital.svg", scale: 0.85 }
   - { name: "Lightdrop", logo: "lightdrop.svg", scale: 0.89 }
+  - { name: "Greenhouse", logo: "greenhouse.svg", scale: 0.9 }
+  - { name: "The Museum Collective", logo: "museum-collective.svg", scale: 1.35 }
 
 # --- analytics -----------------------------------------------------------
 # Paste the GA4 Measurement ID here (looks like G-XXXXXXXXXX) and the tag
