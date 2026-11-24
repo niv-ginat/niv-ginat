@@ -10,10 +10,14 @@
      layout does not reflow on Windows or Android. */
   --font-sans: "Helvetica Neue", Helvetica, Arial, sans-serif;
   /* The accent face: a serif italic dropped into the Helvetica for emphasis,
-     and swapped in on hover. Set a touch larger, because a serif italic
-     reads small next to a grotesk at the same size. */
+     and swapped in on hover. Instrument Serif was picked for its x-height:
+     0.510 of the em against Helvetica Neue's 0.517, and a similar x-to-cap
+     ratio, so lowercase and capitals both line up with the sans. */
   --font-serif: "Instrument Serif", "Times New Roman", Times, serif;
-  --serif-scale: 1.12;
+  /* Helvetica Neue's x-height as a share of the em. font-size-adjust
+     scales the serif (and any fallback) to exactly this, so the two faces
+     share one x-height whatever loads. */
+  --x-height: 0.517;
 
   /* fluid scale — min at 375px, max at 1440px */
   --t-meta: 0.8125rem;                                  /* 13  nav, footer, tags */
@@ -615,9 +619,15 @@ p {
    16/9 col-lg-8 came out ~500px tall at a 1380px container), then taken up
    a further 10% — every stop scaled together so the card grows at the same
    rate whether it is the floor, the viewport track or the ceiling holding it. */
-#work { --card-h: clamp(484px, 48.4vw, 750px); }
+/* Four-column mosaic (quarter, half, full). Cards are shorter than the old
+   three-column grid so a row reads as a strip rather than a wall. */
+#work {
+  --card-h: clamp(360px, 30vw, 500px);
+  /* Half Bootstrap's 1.5rem gutter, so the mosaic reads as one tight block. */
+  --bs-gutter-x: 0.75rem;
+}
 
-.work-item { margin-bottom: var(--s-4); }
+.work-item { margin-bottom: 1.25rem; } /* half of --s-4, matching the tighter column gutter */
 
 .work-item a {
   color: inherit;
@@ -1009,10 +1019,10 @@ p {
 
   #filters .button { margin-right: var(--s-2) !important; }
 
-  .work-item { margin-bottom: var(--s-3); }
+  .work-item { margin-bottom: 0.75rem; }
 
   /* Single column on mobile, so every piece gets the same height. */
-  #work { --card-h: 411px; }
+  #work { --card-h: 380px; }
 
   #work h4 { margin-bottom: 0; }
 
@@ -1317,20 +1327,32 @@ p {
   font-family: var(--font-serif);
   font-style: italic;
   font-weight: 400;
-  font-size: calc(1em * var(--serif-scale));
-  letter-spacing: -0.005em;
-  line-height: 0;
-}
-
-/* Hover swap: the label turns to the serif italic in place. */
-#work .work-item a:hover h3,
-#navigation a:hover,
-.introduction-text h1 a:hover,
-.deck-card:hover ~ * .deck-title,
-.intro-deck:hover .deck-title {
-  font-family: var(--font-serif);
-  font-style: italic;
+  font-size-adjust: ex-height var(--x-height);
   letter-spacing: 0;
 }
 
-#work .work-item a:hover h3 { font-size: calc(var(--t-small) * var(--serif-scale)); }
+/* Serif morph (js/serif-morph.js): on hover each letter of a label turns
+   into the serif italic in turn, with a small blink as it changes. Letters
+   are inline-block so the blink can move them; the word still reflows
+   naturally as the narrower serif letters come in. */
+.morph .mc {
+  display: inline-block;
+  white-space: pre;
+}
+
+.morph .mc.is-serif {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size-adjust: ex-height var(--x-height);
+}
+
+.morph .mc.is-blink { animation: morph-blink 0.26s var(--ease) both; }
+
+@keyframes morph-blink {
+  0%   { opacity: 0.15; transform: translateY(0.18em); }
+  100% { opacity: 1;    transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .morph .mc.is-blink { animation: none; }
+}
