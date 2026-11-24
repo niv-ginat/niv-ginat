@@ -808,9 +808,7 @@ p {
 
 /* --- the argument, set large --- */
 
-/* Write-up: callout headline left, small write-up right. The headline
-   sticks while the column beside it scrolls, so a long write-up never
-   leaves it behind. */
+/* Write-up: callout headline left, small write-up right, 50/50. */
 .project-prose {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
@@ -819,8 +817,6 @@ p {
 }
 
 .project-headline {
-  position: sticky;
-  top: var(--s-5);
   margin: 0;
   font-size: clamp(2.25rem, 1.3rem + 3.2vw, 4.25rem);
   line-height: 1.04;
@@ -840,7 +836,7 @@ p {
   font-size: 0.875rem;
   line-height: 1.65;
   color: var(--ink-secondary);
-  max-width: 46ch;
+  max-width: 52ch;
   margin-bottom: 1em;
 }
 
@@ -854,7 +850,6 @@ p {
     grid-template-columns: 1fr;
     row-gap: var(--s-4);
   }
-  .project-headline { position: static; }
 }
 
 #project-gallery img,

@@ -17,7 +17,7 @@ layout: default
 then the details row, then the 50/50 write-up, then the work. No cover
 image up top. {% endcomment %}
 <div id="project-introduction" class="row justify-content-center">
-  <div class="col-lg-10 col-12">
+  <div class="col-12">
     <h1 class="project-title">{{ page.title }}</h1>
   </div>
 </div>
@@ -25,7 +25,7 @@ image up top. {% endcomment %}
 <!-- Same centred 10-column box as the cover, clip and gallery, so the text
      edges line up with the image edges on every case study. -->
 <div id="project-description" class="row justify-content-center">
-  <div class="col-lg-10 col-12">
+  <div class="col-12">
 
   <div class="project-meta row">
     <div class="col-6 col-md-3">
@@ -74,7 +74,7 @@ image up top. {% endcomment %}
      a case study run one clip up top and another inside the gallery. -->
 {% if page.hero_video %}
 <div id="project-hero-video" class="row justify-content-center">
-  <div class="col-lg-10 col-12">
+  <div class="col-12">
     {% include project-video.html src=page.hero_video alt=page.hero_video_alt %}
   </div>
 </div>
@@ -87,7 +87,7 @@ image up top. {% endcomment %}
 
 {% if page.video and video_inline == false %}
 <div id="project-video" class="row justify-content-center">
-  <div class="col-lg-10 col-12">
+  <div class="col-12">
     {% include project-video.html %}
   </div>
 </div>
@@ -95,7 +95,7 @@ image up top. {% endcomment %}
 
 {% if images and images.size > 0 %}
 <div id="project-gallery" class="row justify-content-center{% if page.gallery_seamless %} seamless{% endif %}">
-  <div class="col-lg-10 col-12">
+  <div class="col-12">
     {% for img in images %}
       {% comment %}
         A nested list inside "gallery" renders as one row of side-by-side
