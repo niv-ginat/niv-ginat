@@ -756,11 +756,18 @@ p {
    PROJECT PAGES
    ========================================================================== */
 
-#project-introduction { margin-bottom: var(--s-5); }
+#project-introduction { padding-top: var(--s-5); }
 
-#project-introduction img {
-  width: 100%;
-  border-radius: var(--radius);
+/* The project name, set as large as the page allows: the one loud element
+   on a case study, everything after it is quiet. */
+.project-title {
+  margin: 0;
+  font-size: clamp(3.25rem, 1.2rem + 8.4vw, 10rem);
+  line-height: 0.92;
+  letter-spacing: -0.045em;
+  font-weight: 400;
+  color: var(--ink);
+  overflow-wrap: anywhere;
 }
 
 #project-description {

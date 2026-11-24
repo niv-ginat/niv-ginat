@@ -13,13 +13,14 @@ layout: default
   {% assign images = found | map: "path" %}
 {% endif %}
 
-{% if page.cover %}
+{% comment %} Every case study opens the same way: the project name set big,
+then the details row, then the 50/50 write-up, then the work. No cover
+image up top. {% endcomment %}
 <div id="project-introduction" class="row justify-content-center">
   <div class="col-lg-10 col-12">
-    <img src="{{ page.cover }}" alt="{{ page.title }}" />
+    <h1 class="project-title">{{ page.title }}</h1>
   </div>
 </div>
-{% endif %}
 
 <!-- Same centred 10-column box as the cover, clip and gallery, so the text
      edges line up with the image edges on every case study. -->
