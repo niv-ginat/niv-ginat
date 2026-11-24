@@ -5,7 +5,7 @@ description: Product and brand designer in Los Angeles. I design brands and the 
 ---
 
 <div class="row">
-  <div class="col-12">
+  <div class="col-lg-10">
     <div class="introduction-text" data-intro-scroll>
       <div class="intro-sticky">
       <div class="intro-layout">
@@ -15,22 +15,6 @@ description: Product and brand designer in Los Angeles. I design brands and the 
         <span class="stmt-line">Screens are a commodity now. Knowing <em>what to say</em> isn't.</span>
         <span class="stmt-line">Based in Los Angeles, working across the US and Europe. <a href="mailto:{{ site.author.email }}">Let's work together</a></span>
       </h1>
-      {% comment %} Card deck: the first projects on the grid, stacked. The top
-      card turns over like a page every few seconds to show the next one
-      (intro-deck.js). Without JS, or with reduced motion, it is a still
-      stack whose top card links to its project. {% endcomment %}
-      {% assign deck = site.projects | where_exp: "p", "p.hidden != true" | where_exp: "p", "p.thumb" | sort: "order" %}
-      <div class="intro-deck" data-intro-deck>
-        <div class="deck-stack">
-          {% for p in deck limit: 8 %}
-          <a class="deck-card" href="{{ p.url }}" data-title="{{ p.title }}" data-caps="{{ p.capabilities }}"{% unless forloop.first %} tabindex="-1" aria-hidden="true"{% endunless %}>
-            <img src="{{ p.thumb }}" alt="{{ p.title }}"{% unless forloop.first %} loading="lazy"{% endunless %} />
-          </a>
-          {% endfor %}
-        </div>
-        {% assign first = deck | first %}
-        <p class="deck-caption" aria-live="polite"><span class="deck-title">{{ first.title }}</span><span class="deck-caps">{{ first.capabilities }}</span></p>
-      </div>
       </div>
       </div>
     </div>
@@ -104,7 +88,6 @@ description: Product and brand designer in Los Angeles. I design brands and the 
 <script src="/js/packery-mode.pkgd.js"></script>
 <script src="/js/nav-toggle.js"></script>
 <script src="/js/intro-scroll.js"></script>
-<script src="/js/intro-deck.js"></script>
 <script src="/js/logoShuffle.js"></script>
 <script>
 // external js: isotope.pkgd.js
