@@ -804,7 +804,7 @@ p {
    leaves it behind. */
 .project-prose {
   display: grid;
-  grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   column-gap: clamp(2rem, 6vw, 7rem);
   align-items: start;
 }
