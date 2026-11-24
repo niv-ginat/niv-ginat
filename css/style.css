@@ -799,29 +799,54 @@ p {
 
 /* --- the argument, set large --- */
 
-.project-prose p {
-  font-size: var(--t-h2);
-  line-height: 1.28;
-  letter-spacing: -0.015em;
+/* Write-up: callout headline left, small write-up right. The headline
+   sticks while the column beside it scrolls, so a long write-up never
+   leaves it behind. */
+.project-prose {
+  display: grid;
+  grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+  column-gap: clamp(2rem, 6vw, 7rem);
+  align-items: start;
+}
+
+.project-headline {
+  position: sticky;
+  top: var(--s-5);
+  margin: 0;
+  font-size: clamp(2.25rem, 1.3rem + 3.2vw, 4.25rem);
+  line-height: 1.04;
+  letter-spacing: -0.025em;
+  font-weight: 400;
   color: var(--ink);
-  max-width: 24ch;
-  margin-bottom: var(--s-3);
 }
 
-/* The opening statement and the body copy both fill the 10-column wrapper,
-   so the text edges line up with the images below. */
-.project-prose p:first-child { max-width: none; }
-
-/* everything after the opening statement drops to reading size */
-.project-prose p ~ p {
-  font-size: var(--t-lead);
-  line-height: 1.5;
+.project-headline em {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size-adjust: ex-height var(--x-height);
   letter-spacing: 0;
-  color: var(--ink-secondary);
-  max-width: none;
 }
 
-.project-prose p:last-child { margin-bottom: 0; }
+.project-body p {
+  font-size: var(--t-small);
+  line-height: 1.6;
+  color: var(--ink-secondary);
+  max-width: 46ch;
+  margin-bottom: 1em;
+}
+
+/* The opening paragraph, which says what the thing is, in full ink. */
+.project-body p:first-child { color: var(--ink); }
+
+.project-body p:last-child { margin-bottom: 0; }
+
+@media (max-width: 991px) {
+  .project-prose {
+    grid-template-columns: 1fr;
+    row-gap: var(--s-4);
+  }
+  .project-headline { position: static; }
+}
 
 #project-gallery img,
 #project-gallery video {
@@ -947,8 +972,7 @@ p {
 
   .project-meta [class*="col-"] { margin-bottom: var(--s-3); }
 
-  .project-prose p,
-  .project-prose p:first-child { max-width: none; }
+  .project-body p { max-width: none; }
 
   #project-gallery img,
   #project-gallery video { margin-bottom: var(--s-3); }

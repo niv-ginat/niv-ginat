@@ -54,9 +54,15 @@ layout: default
     {% endif %}
   </div>
 
+  {% comment %} Write-up: a big callout headline on the left (front matter
+  `headline`, falling back to the title), the full write-up set small on the
+  right. {% endcomment %}
   {% if content != '' %}
   <div class="project-prose">
-    {{ content }}
+    <h2 class="project-headline">{% if page.headline %}{{ page.headline }}{% else %}{{ page.title }}{% endif %}</h2>
+    <div class="project-body">
+      {{ content }}
+    </div>
   </div>
   {% endif %}
 
