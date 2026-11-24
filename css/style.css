@@ -34,18 +34,20 @@
   --measure: 68ch;          /* max line length for running prose */
 
   /* --- colour ------------------------------------------------------------ */
-  /* near-black rather than #000: pure white on pure black halates,
-     especially in light weights. Reads as black, renders cleaner. */
-  --ground: #0b0b0b;
-  --ink: rgba(255, 255, 255, 0.94);
-  --ink-secondary: rgba(255, 255, 255, 0.62);
-  --ink-faint: rgba(255, 255, 255, 0.38);
-  /* The original site drew every rule as a solid 1px white line. */
-  --rule: #ffffff;
-  --rule-strong: #ffffff;
+  /* Light theme (Nov 2026): warm off-white paper and black type, taken
+     from the poster reference (#FFFCF9). Every colour on the site comes
+     from these tokens, so the whole page flips with them. */
+  --ground: #fffcf9;
+  --ink: #0a0a0a;
+  --ink-secondary: rgba(10, 10, 10, 0.6);
+  --ink-faint: rgba(10, 10, 10, 0.36);
+  /* Rules stay solid 1px lines, now in black. */
+  --rule: #0a0a0a;
+  --rule-strong: #0a0a0a;
   --rule-weight: 1px;
   /* Greyscale: emphasis carried by value, not hue. */
-  --accent: #ffffff;
+  --accent: #0a0a0a;
+  --placeholder: #efebe6;
 
   /* Square by default. Kept as a token so a future decision is one line. */
   --radius: 0;
@@ -309,7 +311,7 @@ p {
     scale(calc(1 - var(--pos) * 0.045))
     rotate(calc(var(--pos) * 2.2deg));
   filter: brightness(calc(1 - var(--pos) * 0.22));
-  box-shadow: 0 24px 60px -24px rgba(0, 0, 0, 0.8);
+  box-shadow: 0 24px 50px -28px rgba(0, 0, 0, 0.35);
   border-bottom: none;
 }
 
@@ -546,9 +548,9 @@ p {
   object-fit: contain;
   /* The supplied marks are every colour going — black, near-black, brand
      blue, brand red — and several would be invisible on this ground. This
-     flattens any of them, raster or vector, to pure white; opacity then
-     holds them just off-white, lifting to full white on hover. */
-  filter: brightness(0) invert(1);
+     flattens any of them, raster or vector, to pure black; opacity then
+     holds them at a soft grey, lifting to full black on hover. */
+  filter: brightness(0);
   opacity: 0.68;
   transition: opacity 0.3s var(--ease);
 }
@@ -1177,7 +1179,7 @@ p {
   height: 150px;
   object-fit: cover;
   border-radius: var(--radius);
-  background: rgba(255, 255, 255, 0.04);
+  background: rgba(0, 0, 0, 0.04);
   transition: opacity 0.3s var(--ease);
 }
 
@@ -1288,6 +1290,8 @@ p {
   margin-left: calc(var(--logo-w) * var(--logo-inset) * -1);
   aspect-ratio: 508 / 184;
   background-image: url('/images/logos/nivginat-sprite.webp');
+  /* The sprite is drawn white; invert turns it black on the light ground. */
+  filter: invert(1);
   background-repeat: no-repeat;
   background-size: 3200% 100%;
   background-position: 0 0;
