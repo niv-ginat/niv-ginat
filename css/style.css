@@ -21,6 +21,7 @@
 
   /* fluid scale — min at 375px, max at 1440px */
   --t-meta: 0.8125rem;                                  /* 13  nav, footer, tags */
+  --t-micro: 0.6875rem;                                 /* 11  labels, captions  */
   --t-small: 0.9375rem;                                 /* 15  captions          */
   --t-body: clamp(1rem, 0.94rem + 0.25vw, 1.125rem);    /* 16 → 18  running text */
   --t-lead: clamp(1.125rem, 1rem + 0.5vw, 1.375rem);    /* 18 → 22  intro para   */
@@ -453,7 +454,8 @@ p {
   display: block;
   /* Per-logo scale carries the optical balance (see _config.yml); a
      max-width here would silently cap the widest wordmarks and undo it. */
-  height: calc(1.5em * var(--logo-scale, 1));
+  /* Kept small on purpose: the big type elsewhere reads bigger for it. */
+  height: calc(0.95em * var(--logo-scale, 1));
   width: auto;
   object-fit: contain;
   /* The supplied marks are every colour going — black, near-black, brand
@@ -461,7 +463,7 @@ p {
      flattens any of them, raster or vector, to pure black; opacity then
      holds them at a soft grey, lifting to full black on hover. */
   filter: brightness(0);
-  opacity: 0.68;
+  opacity: 0.55;
   transition: opacity 0.3s var(--ease);
 }
 
@@ -504,8 +506,8 @@ p {
   color: var(--ink-secondary);
   margin-right: var(--s-3);
   padding: 0;
-  font-size: var(--t-meta);
-  letter-spacing: 0.04em;
+  font-size: var(--t-micro);
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   transition: color 0.2s var(--ease);
 }
@@ -691,7 +693,7 @@ p {
 }
 
 #work h3 {
-  font-size: var(--t-small);
+  font-size: var(--t-meta);
   font-weight: 400;
   margin: 0 0 0.15rem;
   transition: color 0.2s var(--ease);
@@ -704,7 +706,7 @@ p {
    by an IntersectionObserver in index.html. */
 #work h4 {
   font-weight: 400;
-  font-size: var(--t-meta);
+  font-size: var(--t-micro);
   color: var(--ink-secondary);
   padding-bottom: var(--s-2);
   margin-bottom: 0;
@@ -788,7 +790,7 @@ p {
 
 .project-meta .meta-label {
   display: block;
-  font-size: var(--t-meta);
+  font-size: var(--t-micro);
   letter-spacing: 0.11em;
   text-transform: uppercase;
   color: var(--ink-faint);
@@ -797,10 +799,10 @@ p {
 
 .project-meta .meta-value {
   display: block;
-  font-size: var(--t-h3);
-  line-height: 1.25;
+  font-size: var(--t-small);
+  line-height: 1.4;
   color: var(--ink);
-  letter-spacing: -0.01em;
+  letter-spacing: 0;
   padding-right: var(--s-3);
 }
 
@@ -835,8 +837,8 @@ p {
 }
 
 .project-body p {
-  font-size: var(--t-small);
-  line-height: 1.6;
+  font-size: 0.875rem;
+  line-height: 1.65;
   color: var(--ink-secondary);
   max-width: 46ch;
   margin-bottom: 1em;
