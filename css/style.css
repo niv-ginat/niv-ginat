@@ -9,6 +9,11 @@
      then Helvetica, then Arial — which is metrically compatible, so the
      layout does not reflow on Windows or Android. */
   --font-sans: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  /* The accent face: a serif italic dropped into the Helvetica for emphasis,
+     and swapped in on hover. Set a touch larger, because a serif italic
+     reads small next to a grotesk at the same size. */
+  --font-serif: "Instrument Serif", "Times New Roman", Times, serif;
+  --serif-scale: 1.12;
 
   /* fluid scale — min at 375px, max at 1440px */
   --t-meta: 0.8125rem;                                  /* 13  nav, footer, tags */
@@ -254,47 +259,100 @@ p {
   max-width: var(--measure);
 }
 
-/* --- artwork behind the statement ----------------------------------------
-   A single portrait image, centred in the pinned frame and held under the
-   text. It drifts against the scroll while the statement lights (see
-   intro-scroll.js); with no script it simply sits still. Dimmed hard,
-   because the faint state of the text has to stay readable over it. */
+/* --- statement + card deck ---------------------------------------------
+   The statement on the left, a stack of project cards pushed up against it
+   on the right. The deck turns its top card over every few seconds
+   (intro-deck.js). */
 
 .intro-sticky { position: relative; }
 
-/* Centred on the screen, not on the ten-column text block, which sits left
-   of centre. intro-scroll.js measures the offset from the column's left edge
-   to the page edge and hands it over as --intro-inset. */
-.intro-media {
-  position: absolute;
-  /* Up past the header to the top of the screen. The box is what clips the
-     image, so stopping at the pinned frame would cut it off mid-climb.
-     --intro-top is the frame's distance from the top, set in JS. */
-  top: calc(-1 * var(--intro-top, 0px));
-  bottom: 0;
-  left: calc(-1 * var(--intro-inset, 0px));
-  width: var(--intro-vw, 100vw);
+.intro-layout {
   display: grid;
-  place-items: center;
-  z-index: 0;
-  pointer-events: none;
-  overflow: hidden;
+  /* The text gets a fixed measure and the deck sits straight after it,
+     rather than being pushed off to the far edge of the page. */
+  grid-template-columns: minmax(0, 44rem) auto;
+  justify-content: start;
+  align-items: end;
+  column-gap: clamp(2rem, 4vw, 4rem);
+  width: 100%;
 }
 
-.intro-media img {
-  width: min(30vw, 420px);
-  /* Explicit, because the width/height attributes (there to reserve space
-     before the file loads) would otherwise fix the height at its natural
-     pixel size and aspect-ratio would never apply. */
-  height: auto;
-  aspect-ratio: 3 / 4;
-  object-fit: cover;
-  opacity: 0.45;
-  filter: brightness(0.62);
+.intro-deck {
+  width: clamp(220px, 24vw, 380px);
+  margin: 0;
 }
+
+.deck-stack {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  perspective: 1600px;
+}
+
+.deck-card {
+  --pos: 0;
+  position: absolute;
+  inset: 0;
+  display: block;
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--placeholder, #1a1a1a);
+  transform-origin: left center;
+  backface-visibility: hidden;
+  /* Each card further back sits up and to the right, a little smaller and
+     dimmer, so the stack reads as a deck rather than one image. */
+  transform:
+    translate3d(calc(var(--pos) * 14px), calc(var(--pos) * -14px), 0)
+    scale(calc(1 - var(--pos) * 0.045))
+    rotate(calc(var(--pos) * 2.2deg));
+  filter: brightness(calc(1 - var(--pos) * 0.22));
+  box-shadow: 0 24px 60px -24px rgba(0, 0, 0, 0.8);
+  border-bottom: none;
+}
+
+.deck-card img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.deck-card.is-tucked { opacity: 0; }
+
+.intro-deck.is-animated .deck-card {
+  transition:
+    transform 0.7s var(--ease-media),
+    filter 0.7s var(--ease),
+    opacity 0.4s var(--ease);
+}
+
+/* The page turn: the top card swings over from its left edge and away. */
+.intro-deck.is-animated .deck-card.is-turning {
+  transition: transform 0.9s cubic-bezier(0.55, 0.05, 0.35, 1), opacity 0.9s var(--ease);
+  transform: translate3d(-6%, 2%, 0) rotateY(-178deg) rotate(-4deg);
+  opacity: 0;
+}
+
+/* Jump straight to the back of the stack, unseen, after the turn. */
+.intro-deck.is-animated .deck-card.is-returning { transition: none; }
+
+.deck-caption {
+  margin: var(--s-2) 0 0;
+  font-size: var(--t-small);
+  line-height: 1.4;
+  display: flex;
+  flex-direction: column;
+}
+
+.deck-caption .deck-title { color: var(--ink); }
+.deck-caption .deck-caps { color: var(--ink-faint); }
 
 @media (max-width: 767px) {
-  .intro-media img { width: min(62vw, 300px); opacity: 0.32; }
+  .intro-layout {
+    grid-template-columns: 1fr;
+    align-items: start;
+    row-gap: var(--s-4);
+  }
+  .intro-deck { width: min(58vw, 240px); }
 }
 
 /* One continuous block, every word the same size — no display headline
@@ -410,23 +468,57 @@ p {
    name a client. Greyscale throughout, in line with the rest of the site —
    the names read as a list of facts, not a logo wall. */
 
-/* The strip runs as a single line that steps sideways; the body clips it
-   and the track is duplicated in JS so the loop never shows a seam. */
-#clients .section-body {
-  overflow: hidden;
-}
-
+/* One row of logos that flips over to the next set (index.html). Without
+   JS the whole list wraps onto rows of six. */
 .clients-list {
   list-style: none;
   margin: 0;
   padding: 0;
-  display: flex;
-  flex-wrap: nowrap;
-  gap: var(--s-2) var(--s-5);
-  will-change: transform;
+  display: grid;
+  grid-template-columns: repeat(var(--slots, 6), minmax(0, 1fr));
+  gap: var(--s-3) var(--s-4);
+  align-items: center;
 }
 
-.clients-list li { flex: 0 0 auto; }
+.clients-list li {
+  display: flex;
+  align-items: center;
+  min-height: 3.2em;
+  perspective: 600px;
+}
+
+.flip-face {
+  display: flex;
+  align-items: center;
+  transform-origin: 50% 50%;
+  transition:
+    transform 0.32s cubic-bezier(0.55, 0, 0.75, 0.05),
+    opacity 0.32s var(--ease);
+}
+
+.flip-face.is-out {
+  transform: rotateX(90deg);
+  opacity: 0;
+}
+
+/* Comes back from the other side: jump to -90° with no transition, then
+   ease out to flat. */
+.flip-face.is-in {
+  transform: rotateX(-90deg);
+  opacity: 0;
+  transition: none;
+}
+
+.clients-list.is-flipping .flip-face:not(.is-out) {
+  transition:
+    transform 0.42s cubic-bezier(0.2, 0.9, 0.3, 1.2),
+    opacity 0.3s var(--ease);
+}
+
+@media (max-width: 767px) {
+  .clients-list { grid-template-columns: repeat(var(--slots, 3), minmax(0, 1fr)); }
+}
+
 
 .clients-list li {
   font-size: var(--t-h3);
@@ -439,7 +531,7 @@ p {
    rather than width-matched, so a square mark and a long wordmark read as
    the same weight; --logo-scale trims the odd one that still looks off.
    Opacity matches --ink-secondary so marks and text carry the same value. */
-.clients-list li.has-mark { display: flex; align-items: center; }
+
 
 .clients-list img {
   display: block;
@@ -566,8 +658,8 @@ p {
 #work h4:empty::before { content: "\00a0"; }
 
 /* ---- scroll reveal -------------------------------------------------------
-   The media box wipes open from the bottom as the card enters the viewport:
-   0 to full height, one card at a time.
+   Grid pop: the media box springs up from slightly small and low as the
+   card enters the viewport, one card at a time.
 
    The clip sits on `.media`, not on the image inside it. The box keeps its
    size throughout, so Isotope/Packery never sees a size change and the grid
@@ -578,18 +670,24 @@ p {
    hidden start state only ever applies when something is guaranteed to
    reveal it. Without JS every card stays visible. */
 #work.reveal-media .media {
-  clip-path: inset(100% 0 0 0);
-  transition: clip-path 0.85s var(--ease-media);
+  opacity: 0;
+  transform: translate3d(0, 28px, 0) scale(0.86);
+  transform-origin: 50% 70%;
+  transition:
+    transform 0.75s cubic-bezier(0.34, 1.45, 0.64, 1),
+    opacity 0.45s var(--ease);
 }
 
 #work.reveal-media .work-item.is-inview .media {
-  clip-path: inset(0 0 0 0);
+  opacity: 1;
+  transform: none;
 }
 
 @media (prefers-reduced-motion: reduce) {
   #work.reveal-media .media,
   #work.reveal-media .work-item.is-inview .media {
-    clip-path: none;
+    opacity: 1;
+    transform: none;
     transition: none;
   }
 }
@@ -1205,3 +1303,34 @@ p {
   /* Width only — the left offset is derived from it. */
   .logo-mark { --logo-w: 150px; }
 }
+
+
+/* ==========================================================================
+   SERIF ACCENT
+   ==========================================================================
+   Helvetica carries everything; a serif italic steps in for emphasis
+   (<em class="accent">) and on hover for links and project titles, the way
+   a second voice cuts into a sentence. */
+
+.accent,
+.statement em {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: calc(1em * var(--serif-scale));
+  letter-spacing: -0.005em;
+  line-height: 0;
+}
+
+/* Hover swap: the label turns to the serif italic in place. */
+#work .work-item a:hover h3,
+#navigation a:hover,
+.introduction-text h1 a:hover,
+.deck-card:hover ~ * .deck-title,
+.intro-deck:hover .deck-title {
+  font-family: var(--font-serif);
+  font-style: italic;
+  letter-spacing: 0;
+}
+
+#work .work-item a:hover h3 { font-size: calc(var(--t-small) * var(--serif-scale)); }

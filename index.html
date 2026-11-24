@@ -5,32 +5,33 @@ description: Product and brand designer in Los Angeles. I design brands and the 
 ---
 
 <div class="row">
-  <div class="col-lg-10">
+  <div class="col-12">
     <div class="introduction-text" data-intro-scroll>
       <div class="intro-sticky">
-      {% comment %} Decorative, so alt is empty and it is hidden from screen
-      readers; intro-scroll.js runs it up the screen behind the statement.
-      {% endcomment %}
-      <div class="intro-media" aria-hidden="true">
-        <img src="/images/intro/niv-munich.webp" alt=""
-             width="900" height="1200" />
-      </div>
+      <div class="intro-layout">
       <h1 class="statement">
-        <span class="stmt-line">I design brands and the products they live inside.</span>
-        <span class="stmt-line">Those are usually two jobs and two people, and doing both
-        is the point.</span>
-        <span class="stmt-line">Fifteen years across a music library of nearly a million
-        tracks, a dog breeder marketplace, a real estate brokerage and a care
-        platform for senior living, alongside album covers, packaging and
-        murals.</span>
-        <span class="stmt-line">The work underneath is the same each time: figure out what
-        the company actually is, find the story that makes someone believe it,
-        then build the thing that carries it.</span>
-        <span class="stmt-line">Screens are a commodity now, generated on demand. Knowing
-        what to say, and when someone is ready to hear it, is not.</span>
-        <span class="stmt-line">Based in Los Angeles, working across the US and Europe.</span>
-        <span class="stmt-line"><a href="mailto:{{ site.author.email }}">Let's work together</a></span>
+        <span class="stmt-line">I design <em>brands</em> and the <em>products</em> they live inside.</span>
+        <span class="stmt-line">Usually that's two jobs and two people. Doing <em>both</em> is the point.</span>
+        <span class="stmt-line">Screens are a commodity now. Knowing <em>what to say</em> isn't.</span>
+        <span class="stmt-line">Based in Los Angeles, working across the US and Europe. <a href="mailto:{{ site.author.email }}">Let's work together</a></span>
       </h1>
+      {% comment %} Card deck: the first projects on the grid, stacked. The top
+      card turns over like a page every few seconds to show the next one
+      (intro-deck.js). Without JS, or with reduced motion, it is a still
+      stack whose top card links to its project. {% endcomment %}
+      {% assign deck = site.projects | where_exp: "p", "p.hidden != true" | where_exp: "p", "p.thumb" | sort: "order" %}
+      <div class="intro-deck" data-intro-deck>
+        <div class="deck-stack">
+          {% for p in deck limit: 8 %}
+          <a class="deck-card" href="{{ p.url }}" data-title="{{ p.title }}" data-caps="{{ p.capabilities }}"{% unless forloop.first %} tabindex="-1" aria-hidden="true"{% endunless %}>
+            <img src="{{ p.thumb }}" alt="{{ p.title }}"{% unless forloop.first %} loading="lazy"{% endunless %} />
+          </a>
+          {% endfor %}
+        </div>
+        {% assign first = deck | first %}
+        <p class="deck-caption" aria-live="polite"><span class="deck-title">{{ first.title }}</span><span class="deck-caps">{{ first.capabilities }}</span></p>
+      </div>
+      </div>
       </div>
     </div>
   </div>
@@ -103,6 +104,7 @@ description: Product and brand designer in Los Angeles. I design brands and the 
 <script src="/js/packery-mode.pkgd.js"></script>
 <script src="/js/nav-toggle.js"></script>
 <script src="/js/intro-scroll.js"></script>
+<script src="/js/intro-deck.js"></script>
 <script src="/js/logoShuffle.js"></script>
 <script>
 // external js: isotope.pkgd.js
@@ -115,7 +117,12 @@ description: Product and brand designer in Los Angeles. I design brands and the 
       var $grid = $(".grid").isotope({
         itemSelector: ".element-item",
         percentPosition: true,
-        transitionDuration: "0.4s",
+        transitionDuration: "0.5s",
+        // Filtering pops cards in and out from their centres, one after
+        // another, rather than fading them all at once.
+        stagger: 35,
+        hiddenStyle: { opacity: 0, transform: "scale(0.82)" },
+        visibleStyle: { opacity: 1, transform: "scale(1)" },
         // Packery back-fills the gaps a plain row layout leaves when the
         // next card is too wide for the space left over. Because every card
         // is the same height, filling a gap still lands the card on the row
@@ -185,7 +192,7 @@ description: Product and brand designer in Los Angeles. I design brands and the 
             });
             hit.forEach(function (entry, i) {
               var media = entry.target.querySelector(".media");
-              if (media) media.style.transitionDelay = i * 110 + "ms";
+              if (media) media.style.transitionDelay = i * 90 + "ms";
               entry.target.classList.add("is-inview");
               io.unobserve(entry.target);
             });
@@ -196,53 +203,75 @@ description: Product and brand designer in Los Angeles. I design brands and the 
       })();
 
       // ------------------------------------------------------------------
-      // Client strip: one line, stepping sideways every 2s.
+      // Client row: one row of logos that flips over to the next set.
       //
-      // The list is duplicated so the track can run past the end and be
-      // snapped back to the start invisibly — without the copy you would
-      // see the row empty out before it wrapped. Each step advances by the
-      // real width of the next item, since the marks differ in width.
+      // Every few seconds each slot turns over on its horizontal axis, left
+      // to right, and comes back showing the next logo — the whole row moves
+      // on to the next set together. Logos run in one loop, so ten clients
+      // across six slots never leave a slot empty. Six slots on desktop,
+      // three on phones. Without JS the full list simply wraps onto rows.
       // ------------------------------------------------------------------
       (function () {
         var list = document.querySelector(".clients-list");
         if (!list) return;
-        if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-
-        var originals = Array.prototype.slice.call(list.children);
-        if (originals.length < 3) return;
-        originals.forEach(function (el) {
-          var copy = el.cloneNode(true);
-          copy.setAttribute("aria-hidden", "true");
-          list.appendChild(copy);
+        var logos = Array.prototype.slice.call(list.children).map(function (li) {
+          return { html: li.innerHTML, cls: li.className };
         });
+        if (logos.length < 2) return;
+        var reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
+        var phone = window.matchMedia("(max-width: 767px)");
+        var HOLD = 3200, STAGGER = 90, HALF = 320;
+        var start = 0, slots = [], timer = null, paused = false;
 
-        var gap = parseFloat(getComputedStyle(list).columnGap) || 0;
-        var index = 0;
-        var offset = 0;
-        var SHIFT = 2000;
-        var GLIDE = 700;
-
-        function step() {
-          var leaving = list.children[index];
-          if (!leaving) return;
-          offset += leaving.getBoundingClientRect().width + gap;
-          list.style.transition = "transform " + GLIDE + "ms var(--ease-media)";
-          list.style.transform = "translateX(-" + offset + "px)";
-          index++;
-
-          // Back to the top of the loop once the originals have all left.
-          if (index >= originals.length) {
-            setTimeout(function () {
-              list.style.transition = "none";
-              list.style.transform = "translateX(0)";
-              void list.offsetWidth; // flush, so the next glide animates
-              offset = 0;
-              index = 0;
-            }, GLIDE + 40);
+        function build() {
+          var n = Math.min(phone.matches ? 3 : 6, logos.length);
+          list.innerHTML = "";
+          list.classList.add("is-flipping");
+          list.style.setProperty("--slots", n);
+          slots = [];
+          for (var i = 0; i < n; i++) {
+            var logo = logos[(start + i) % logos.length];
+            var li = document.createElement("li");
+            li.className = logo.cls + " flip-slot";
+            var face = document.createElement("span");
+            face.className = "flip-face";
+            face.innerHTML = logo.html;
+            li.appendChild(face);
+            list.appendChild(li);
+            slots.push({ li: li, face: face });
           }
         }
 
-        setInterval(step, SHIFT);
+        function flip() {
+          if (paused || document.hidden) return;
+          start = (start + slots.length) % logos.length;
+          slots.forEach(function (s, i) {
+            var logo = logos[(start + i) % logos.length];
+            setTimeout(function () {
+              s.face.classList.add("is-out");
+              setTimeout(function () {
+                s.face.innerHTML = logo.html;
+                s.li.className = logo.cls + " flip-slot";
+                s.face.classList.remove("is-out");
+                s.face.classList.add("is-in");
+                void s.face.offsetWidth; // flush so the return animates
+                s.face.classList.remove("is-in");
+              }, HALF);
+            }, i * STAGGER);
+          });
+        }
+
+        function run() {
+          clearInterval(timer);
+          build();
+          if (!reduced.matches) timer = setInterval(flip, HOLD);
+        }
+
+        list.addEventListener("mouseenter", function () { paused = true; });
+        list.addEventListener("mouseleave", function () { paused = false; });
+        if (phone.addEventListener) phone.addEventListener("change", run);
+        if (reduced.addEventListener) reduced.addEventListener("change", run);
+        run();
       })();
 
       // change is-checked class on buttons
