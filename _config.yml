@@ -73,6 +73,9 @@ clients:
 # Switch a whole group of projects on or off at once. A project joins a group
 # with `group: <name>` in its front matter. false hides every project in the
 # group from the homepage grid (their pages still exist at their URLs).
+# Client logo row on the home page. false hides it.
+show_clients: false
+
 project_groups:
   partner: true   # Blumenes, Aubrey Kathryn
 
