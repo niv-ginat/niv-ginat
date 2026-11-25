@@ -74,7 +74,7 @@ clients:
 # with `group: <name>` in its front matter. false hides every project in the
 # group from the homepage grid (their pages still exist at their URLs).
 project_groups:
-  partner: false  # Blumenes, Aubrey Kathryn
+  partner: true   # Blumenes, Aubrey Kathryn
 
 # --- analytics -----------------------------------------------------------
 # Paste the GA4 Measurement ID here (looks like G-XXXXXXXXXX) and the tag
