@@ -277,7 +277,8 @@ p {
 .introduction-text .statement {
   position: relative;
   z-index: 1;
-  font-size: var(--t-h2);
+  /* ~40% over --t-h2 (28 → 40px): 39 → 56px. */
+  font-size: clamp(2.45rem, 1.96rem + 1.96vw, 3.5rem);
   line-height: var(--lh-snug);
   font-weight: 400;
   color: var(--ink);
@@ -304,7 +305,9 @@ p {
 }
 
 .introduction-text.is-reveal .stmt-line {
-  color: var(--ink-faint);
+  /* Lighter than --ink-faint so the unlit lines sit well back until the
+     scroll brings them in. */
+  color: rgba(10, 10, 10, 0.16);
   transition: color 0.45s var(--ease);
 }
 
