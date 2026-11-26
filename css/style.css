@@ -325,6 +325,11 @@ p {
   .introduction-text.is-reveal .stmt-line { transition: none; }
 }
 
+/* Letter repel (js/letter-repel.js): each letter is its own box so it can
+   move; words stay unbreakable so the wrap matches plain text. */
+.statement .rp-word { white-space: nowrap; }
+.statement .rp { display: inline-block; will-change: transform; }
+
 .introduction-text h1 a {
   text-decoration: none;
   border-bottom: 2px solid var(--accent);
